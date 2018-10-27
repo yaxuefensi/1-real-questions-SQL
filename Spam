@@ -1,0 +1,11 @@
+
+关于spam的，
+table1:
+date || user_id || post_id || action {report, like, comment} || report_reason {spam, nudity, ...}
+
+table 2:
+reviewer_id || post_id || date
+
+第一题，昨天report的spam有多少
+
+第二题，每天user看到的post里有多少是spam。

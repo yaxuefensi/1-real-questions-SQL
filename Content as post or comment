@@ -1,5 +1,5 @@
 1) 有content_id, content_type (comment/ post),target_id。如果是comment，target_id就是post的content id，如果是post则target_id为NULL。
-求commentdistribution。 
+求comment distribution。 
 CONTENT_ID|| CONTENT_TYPE || TARGET_ID 
 123|| COMMENT || 100 
 100|| POST || NULL  
@@ -18,3 +18,7 @@ CONTENT_ID|| CONTENT_TYPE || TARGET_ID
 
 
 4) 问怎么判断comment是一个有内容，有意义，conversational的comment 
+
+第一个问题是给定一个data，包含每个post的类型，comment的原帖id，产生一个summary dataset，第一列是comment数，第二列是对应这
+个comment数的数目。没有限定语言，感觉很直接就拿SQL做了。后面还有followup问题是按post类型做那个summary dataset。第二个问题
+是product sense，不好描述，不过就是ab testing那些，感觉udacity上那个课帮助很大。

@@ -43,6 +43,35 @@ sql已经有点乱七八糟了因为我前面举例子啥的改来改去。。�
 对于大型商户和小型local的商户，你的metric会有什么不同
 
 
+Two SQL coding questions, entry level的, 之前看的面经有人建议说一定要一边写一边解释，so I did. 但是感觉真的没必要，因为太简单了,还没说完呢，代码就写完了
+Ads .1point3acres网
+advertiser_id	ad_id	spend	Date	...
+conversions
+ad_id	user_id	conversion$	Date	...
+
+
+. from: 1point3acres 
+select advertiser_id , count(1) as total_spend_per_advertise
+from Ads
+group by advertiser_id //此处我面试的时候用的windowing 而非groupby，他就问我为什么，我说是在big data习惯，因为spark groupby有时候会比windowing慢
+having date_diff(current_timestamp(),date) beween 1 and 30;
+
+select a.count_of_advertisers_who_has_conversions/b.total_count_of_advertisers as percentage_of_advertisers_who_got_conversions 
+from 
+(select count(distinct advertiser_id) as count_of_advertisers_who_has_conversions
+from Ads
+join conversions
+on Ads.id=conversions.id) a, //此处问我逗号是啥意思，我说代表两个table的分隔，这里产生了cartesian join, 但是因为两个表格都只有一个数字，
+也无所谓，没必要单独生成table再计算。
+(select count(distinct advertiser_id) as total_count_of_advertisers
+from Ads
+)b;
+
+最后就是很case的问题， 问用什么metrics去衡量单个advertiser 的 广告效益。这里我貌似又讲多了，去讲什么生产profit, fixed cost, 
+per unit cost, 没必要了，想想就是要么用conversion count rate, 要么用$conversion/$spend 就可以了。
+
+
+
 
 
 

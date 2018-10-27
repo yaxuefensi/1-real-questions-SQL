@@ -42,3 +42,9 @@ action: saw, answered, skip
 2) how to dynamically change the order of the questions showing to the users: 也就是用户如果回答或者跳过了一个问题，
 那么下一个问题应该如何分配给user，来优化用户回答问题的概率
 
+表名：survey_log 列名：user_id, question_id, question_order, event = {imp, answered, skipped}, timestamp，
+第一问是找conversion rate最高的question，我在写完answer rate以后有个follow up问题，说如果imp太少的问题怎么办，我答的是
+加个threshold，舍弃那些出现少于多少次的问题（这里我随便写的10，他没有说什么，不知道对不对）。第二问是在用户已经回答了某一问题的情况下，
+如何安排下一问题使conversion rate最高，我这里就按地里讨论的一样说在已经回答了这一问题的用户中，选他们回答的其余问题里回答率最高的一个，
+但我太紧张了时间用太长，最后写的里面他说有bug，但我还没思考出来就说时间到了，我们进入产品题，我猜我因为这个多半就这么挂了。。
+

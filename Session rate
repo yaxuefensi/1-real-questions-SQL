@@ -1,0 +1,4 @@
+
+然后介绍面试的背景是marketplace
+
+SQL: date|session id|user id| event, calculate the average number of sessions/user per day for the last 30 days

@@ -1,0 +1,12 @@
+
+Givenan event-level table of interactions between pairs of users (note thatthere aren't duplicates in one day 
+for one pair of users), for each possiblenumber of "people interacted with" find the count for that group in agiven day 
+(i.e. 10 people interacted with only one person, 20 with 2, etc.). 
+  
+U1||u2 
+Assuming that the table is consists of two columns, u1and u2: 
+
+
+
+given a tableof interaction between users (user_a | user_b | day), find number of users whohad more than 5 interactions 
+yesterday (assume there is only one uniqueinteraction between a pair of users per day). 

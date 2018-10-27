@@ -1,0 +1,3 @@
+table friending： action_id, target_id, action （accept, request, unfriend), date, time.
+1：overall friend accept rate.  
+2：who has most friends.

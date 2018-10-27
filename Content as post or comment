@@ -22,3 +22,25 @@ CONTENT_ID|| CONTENT_TYPE || TARGET_ID
 第一个问题是给定一个data，包含每个post的类型，comment的原帖id，产生一个summary dataset，第一列是comment数，第二列是对应这
 个comment数的数目。没有限定语言，感觉很直接就拿SQL做了。后面还有followup问题是按post类型做那个summary dataset。第二个问题
 是product sense，不好描述，不过就是ab testing那些，感觉udacity上那个课帮助很大。
+
+2. sql
+table: content_actions {user_id|content_id|conent_type|target_id} content_type = {"comment", "post"}
+Q: 1.What is the total number of comments and total number of posts?
+2.what is the distribution of comments?
+3. How to get the nick name of each facebook user suach david - dave , and if we already have the data how can we use it?
+[/hide]
+
+
+
+补充内容 (2017-3-26 07:43):
+我又看一遍才猛然发现当时写的有很大问题啊 蠢哭了怪不得悲剧了[hide=188]
+select content_type, count(*) from content_id group by content_type;
+
+select temp.cnt, count(temp.post) from
+(select targer_id as post, ...
+
+补充内容 (2017-3-26 07:44):
+select temp.cnt, count(temp.post) from
+(select targer_id as post, count(content_id) as cnt from content_actions 
+where targer_id is not null group by targer_id) temp
+group by temp.cnt;

@@ -1,0 +1,18 @@
+
+dialoglog
+
+(userid int
+
+appid int
+
+type char , a flag either "imp" or "click"
+
+ds timestamp
+
+
+)
+How would you access the quality of app?
+
+How to compute click-through rate (in mySQL)? 
+
+Now we know the rate is 1.4. What does it mean? 

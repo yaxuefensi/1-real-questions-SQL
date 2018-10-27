@@ -32,3 +32,13 @@ of a way to optimize your metric? 行吧，我说那咱就看length, 取答题�
 
 我当时说了两个metrics, 一个是number of questions answered， 一个是fraction of people finish survey 
 (比如answer all questions 算finish)。挑一个做a/b testing应该就行吧我觉得
+
+1. sql, 见过的题目，表格如下：
+|user_id|question_id|question_order||action|timestamp|
+
+action: saw, answered, skip
+
+1) get the highest answer rate question. 一亩-三分-地，独家发布
+2) how to dynamically change the order of the questions showing to the users: 也就是用户如果回答或者跳过了一个问题，
+那么下一个问题应该如何分配给user，来优化用户回答问题的概率
+

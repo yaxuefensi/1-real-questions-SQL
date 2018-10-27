@@ -1,0 +1,18 @@
+
+1. There is table that tracks every time a user turns a feature on or off, with columnsuser_id, action ("on" or "off), date, and time. 
+
+1) How manyusers turned the feature on today? 
+USER_ID || ACTION||DATE||TIME 
+
+
+How manyusers have ever turned the feature on? 
+
+
+2) Create atable that tracks the user last status every day. 
+
+
+3) In a tablethat tracks the status of every user every day, how would you add today's datato it?   
+
+
+5), 如何找出在一天之内始终保持feature on的人，(given status table and action table). 
+

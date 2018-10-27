@@ -1,0 +1,15 @@
+电面过程和大家写的无异，45分钟，相互介绍+写sql+case analytics。In general 我觉得面试官很看重你的分析思路，
+所以一定一定要注重面试官交流。我因为紧张在回答的时候有遗漏一些分析点，但因为一直和面试官交流自己的思路，所以面试官很自然的
+就pick up 起了我miss 掉的点，然后给了我一些引导，能感觉到整体回答完后面试官最后是满意的。我感觉有analytics工作经验的同学可
+以回忆一下自己在和team 一起解决工作中的问题的时候是怎么做的：clarify 问题，break down 问题，表达自己，接收反
+馈，make sure everyone is on the same page, 最后一起达到一个最优的解法。
+
+SQL的两个tables:
+composer
+user_id | date | event (event 有'enter', 'post', 'cancel')
+
+user
+user_id | date | country | dau_flag
+
+Q1: What is the post success rate for each day over the past week?
+Q2: What is the average number of posts per daily active user by country for today?. vis

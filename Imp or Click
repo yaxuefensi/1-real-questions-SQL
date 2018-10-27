@@ -16,3 +16,8 @@ How would you access the quality of app?
 How to compute click-through rate (in mySQL)? 
 
 Now we know the rate is 1.4. What does it mean? 
+
+第三轮：给一个表有四个column：time, user_id, app_id, event ('imp' or 'click') 。大致意思：当一个user
+在玩一个app时，有一定几率会弹出一个窗口让user 添加信用卡（event "imp"），如果这个user按了 yes，那就是一个 click的event.
+如何来判定这个弹窗口的效果？（click through rate），如何看哪个app click through rate最高，如何知道这个table的信
+息是否正确 （比如user 按了一次 yes，结果自动生成多次 click event）. 

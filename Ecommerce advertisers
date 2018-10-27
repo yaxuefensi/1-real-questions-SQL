@@ -16,6 +16,27 @@ Q1: What would the averageadvertiser spend on Facebook? Your query should return
 
 Q3.Thefraction of advertisers has at least one conversion.  
 
+SQL：sql题目比较简单：一个广告table，每行primary key是时间和广告ID，列是timestamp，adsID（广告ID），publisherID（广告商名字），还有广告价格。
+另一个table是该广告有多少人看见，多少人点击。列是timestamp，adsID，#views，#clicks 吧，具体的我想不起来了。。。反正就是很基本的求某天某广告商的
+convertion rate。但是我当时一直脑子里在想上面那个题，我感觉肯定有个东西没说上来，这个不补救的话肯定要挂了。所以sql就随便做了下。就秒写了两个小sql，
+一个是分子的，一个是分母的。然后step by step给面试官简单的说了下相除是convertion。他说好的，你能不能用同一个sql写，我说ok。然后写了个join，此时
+脑子里还在想挽救上面的那个产品题。然后这里出现了事后我认为的误会：（以下sql是编的，为了突出问题编了一下。具体我已经不记得了）. 
+
+         
+我写的：
+select a.xx, b.yy 
+from table_ads a left join table_clicks b on a.extract(date from timestamp) = b.extract(date from timestamp) 
+where a.extract(date from timestamp) = current_date ..... 然后我又把from改了一下，改成了这个：
+from (select * from table_ads where extract(date from timestamp) = current_date) a l
+eft join table_clicks b on a.extract(date from timestamp) = b.extract(date from timestamp). 
+面试官跟我聊了几句，问我为什么要改，这两种写法的差别在哪里。我这个人解释东西比较嘴笨，还是用英文。。你们体会一下这个区别怎么给别人讲。。。
+我讲了半天还在屏幕上拿刚才写好的sql举例子啥的，面试官表示，I don't understand... 我就当时真的很慌了，语言越发不利索。最后面试官说，其实这两个
+是没有区别的。。我说，有区别啊。。。。面试官说，这道题里你用哪种都是一样的，我说，对。面试官很无语说，你刚不是还说有区别吗，还给我解释了半天，虽然
+我没听懂。我说，sql有区别的但是对这个题的话最后的结果是没区别。。。说完我自己都觉得自己很像见风使舵。。。然后最后的时候我猛然发现他求的是某广告商
+（publisherID）的convertion，而我前面写的是group by ads_id（广告的convertion），然后我说我发现了一个小错误能不能改一下。其实当时屏幕上的
+sql已经有点乱七八糟了因为我前面举例子啥的改来改去。。最后面试官说超时了，没关系他已经了解了。当时大概已经过了35分钟了。
+
+
 
 
 

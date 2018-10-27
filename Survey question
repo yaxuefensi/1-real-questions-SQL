@@ -1,0 +1,34 @@
+
+facebook问卷库有很多questions, 每次随机发给用户，用户看到题目可以选择回答，跳过但不退出，或者不高兴答了直接退出。
+提供以下table，q_num是question的sequence number , 记录题目出现顺序。
+Survey table.留学论坛-一亩-三分地
+user_id|q_id|action {imp, ans, skip}|ts|q_num. 1point 3acres 论坛
+
+（1）How do you evaluate which question is best answered?
+就是求回答率最高的那道题吧，写完code, 我就主动提出concern，如果某些问题impression次数太少，对rate计算可能有影响，你想设置
+什么threshold for impression frequency吗？他说good question, 然后给我两个case, 数字是我刚编的，具体不记得了， 大概就
+是answer rate一样，但是分母很不一样， 你怎么判断这两种rate相同还是不同。。。我就说two sample proportion test,  让写公式。
+q1, ans1 = 1, imps1 = 10
+q2, ans2 = 10, imps2 = 100
+
+（2）If one user answered, say question #30, how would you decide which question comes next?. 留学申请论坛-一亩三分地
+我就按conditional probability答的，说找相似users who also answered question #30, find the question with highest answer rate, 
+写了code，找他confirm。 他说你这里只考虑了其他所有非#30的questions，没有考虑sequence，我反应过来原来是要找所有答了#30的人下一题答题率
+最高的那道题。。。这里耗了好多时间。。。code写的不利索哎
+
+（3）Given different algorithms of ordering survey questions, how do you evaluate which one is better? What metrics do you use?
+我就说这个survey的objective应该是get more people engage and answer more questions. 可选的metrics可以有： average # of questions
+answers before exit, porportion of users answered all questions/completed the survey. 他又问以上两种方法， 你觉得哪种更能达到global 
+optimal? 问到这里，心里很虚的说了第二种好。。。因为第二种updating with prior information而第一种只是randomizing没有prior information
+（欢迎讨论，难道是让要我做A/B testing了？？？我刚刚反应过来。。。当时想着这还是coding，不是product，就没想往experiment上说，后悔啊）。。。然后他
+又说，第二种只是在optimize下一道题的答题率，然而并不知道后面的答题情况，如果你想优化the length of questions answered (根据我前面说的metric)，
+就没法达到不是么。。。深深感觉自己给自己挖了个坑然后毫不犹豫得跳了下去。。。他说okay，forget about the previous two methods, can you think 
+of a way to optimize your metric? 行吧，我说那咱就看length, 取答题最多的那些人的答题sequence, 准备写code来着，他说不用写code了只是了解一下
+思路。
+
+然后就没有然后了，此时已经过去35分钟。。。直接进入QA环节。。。说好的product题呢？大概是因为这题答太慢了吧。. 一
+
+有一点没看懂。你其中一个优化objective是more people finishedsurvey请问这个survey怎么算finished呢，前 ...
+
+我当时说了两个metrics, 一个是number of questions answered， 一个是fraction of people finish survey 
+(比如answer all questions 算finish)。挑一个做a/b testing应该就行吧我觉得

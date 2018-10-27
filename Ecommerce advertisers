@@ -1,0 +1,21 @@
+5. 
+We arestudying ecommerce advertisers on FB over a certain time period (say a week). 
+The timeperiod does not matter for this problem. You are given 2 Tables: 
+adv_info:advertiser_id|| ad_id|| spend (primary: ad_id) 
+ad_info:ad_id|| user_id|| price (primary: ad_id, user_id) 
+adv_info:Contains information on advertisers. 
+advertiser_idis id of advertiser 
+ad_id is idof an ad being run by advertiser 
+spend isamount of money in $ that advertiser pays Facebook for ad-id to show it to FBusers. 
+price is how much the user_id spend through this ad.,assuming all prices > 0.  
+Questions- The fraction of advertisers has at least one conversion. - What metrics wouldyou show to advertisers.  
+
+Q1: What would the averageadvertiser spend on Facebook? Your query should return a single number. 
+
+追问：afterwe get this table, what will the distribution look like? 
+
+Q3.Thefraction of advertisers has at least one conversion.  
+
+
+
+

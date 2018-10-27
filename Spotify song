@@ -1,0 +1,45 @@
+
+4. SQL spotify听歌问题，
+table1：time|userid|songid| 
+table2: userid1|userid2
+
+问今天听的最频繁的歌曲是什么？寻找一个list有userid和friendid：两个朋友有多于两首共同听过的歌曲
+
+https://www.1point3acres.com/bbs/forum.php?mod=viewthread&tid=452401&extra=page%3D1%26filter%3Dsortid%26sortid%3D311%26searchoption%5B3046%5D%5Bvalue%5D%3D2%26searchoption%5B3046%5D%5Btype%5D%3Dradio%26sortid%3D311%26orderby%3Ddateline
+
+SQL第二问是要求找出含有pairs of friends的list, 里面的每对朋友都有两首以上共同听过的歌。我试着做了一下，我希望其实是user1, 
+user2的两个column的结果，我这里用了concat, 不是很理想，但想不出来更好的。抛砖引玉，请大家多多post更好的解法。
+
+select 
+concat(userid1, userid2) as friend_pairs
+count(*) as song_ct.1point3acres网
+from. 留学申请论坛-一亩三分地
+(select 
+distinct 
+userid1, userid2, b.songid as song1, c.songid as song2
+from table2 a
+left outer join table1 b on a.userid1 = b.userid 
+left outer join table1 c on a.userid2 = c.userid) a
+where a.song1 = a.song2 and a.song1 is not null and a.song2 is not null 来源一亩.三分地论坛. 
+group by concat(userid1, userid2). 牛人云集,一亩三分地
+having count(*) >= 2-google 1point3acres
+
+from replier: 
+WITH CTE(userid1, userid2, songid)
+AS(
+        SELECT t2.userid1, t2.userid2, t3.songid
+        FROM table2 as t2
+        LEFT JOIN table1 as t1
+        ON t2.userid1 = t1.userid
+        INNER JOIN table1 as t3
+        ON t2.userid2 = t3.userid AND t1.songid = t3.songid
+)
+SELECT userid1, userid2.留学论坛-一亩-三分地
+FROM CTE.1point3acres网
+GROUPBY userid1, userid2
+HAVING COUNT(songid) >= 2 来源一亩.三分地论坛. 
+
+it depends on if we have duplicate pairs in table2, like A B, BA. if we only have unique pairs in table2.
+My strategy is to left join table1 to table2 to have songid for each userid1, then inner join table1 again 
+to find out the same song userid1 and userid2 both listen to, finally group by userid1, 
+userid2, having count(songid) >=2. you will get the pairs as required.

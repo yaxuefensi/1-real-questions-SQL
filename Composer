@@ -1,0 +1,19 @@
+
+SQL:
+COMPOSER
+user_id | date | event("enter", "post", "cancel")
+User
+user_id | date | country | au_flag
+dau_flag：active user ，0 or 1
+
+
+Q1: 
+what is the average rate of successful post last week?
+Q2:
+what is the average rate of post for daily active user by country on today?
+
+求问楼主the average rate of successful post last week 具体怎么理解啊？ 是算过去一周post-cancel / enter吗？ 
+
+题目是另一个帖子里的原题， 抱歉没说清楚
+意思就是POST的总数除以active user的个数
+

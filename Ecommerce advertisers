@@ -70,7 +70,8 @@ from Ads
 最后就是很case的问题， 问用什么metrics去衡量单个advertiser 的 广告效益。这里我貌似又讲多了，去讲什么生产profit, fixed cost, 
 per unit cost, 没必要了，想想就是要么用conversion count rate, 要么用$conversion/$spend 就可以了。
 
-
+还有，如果做个distribution of advertiser's total spend你觉得是什么样的。我说很难讲，可能是normal 或者是lognormal， 
+我偏向后者多一些，会有少数商家在facebooK的平台广告效益特别见效而愿意多spend。
 
 
 

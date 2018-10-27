@@ -1,0 +1,20 @@
+1) 有content_id, content_type (comment/ post),target_id。如果是comment，target_id就是post的content id，如果是post则target_id为NULL。
+求commentdistribution。 
+CONTENT_ID|| CONTENT_TYPE || TARGET_ID 
+123|| COMMENT || 100 
+100|| POST || NULL  
+
+
+
+2) 如果现在content_type变成post, video, photo,article，要求计算每一个content type的comment distribution。 
+
+
+3) Story includes either photo or post . Generate a distribution for the#comments per story. 
+Does this account for stories with 0 comments? 
+CONTENT_ID|| CONTENT_TYPE || TARGET_ID 
+123|| COMMENT || 100 
+100|| POST || NULL  
+
+
+
+4) 问怎么判断comment是一个有内容，有意义，conversational的comment 

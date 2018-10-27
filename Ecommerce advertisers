@@ -37,6 +37,14 @@ eft join table_clicks b on a.extract(date from timestamp) = b.extract(date from 
 sql已经有点乱七八糟了因为我前面举例子啥的改来改去。。最后面试官说超时了，没关系他已经了解了。当时大概已经过了35分钟了。
 
 
+2. adv_info table : adv_id, ad_id, adv_spend. visit 1point3acres for more.
+    ad_info table: ad_id, user_id, user_spend
+用什么metric表示advertising的impact
+对于大型商户和小型local的商户，你的metric会有什么不同
+
+
+
+
 
 
 

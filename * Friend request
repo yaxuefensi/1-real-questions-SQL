@@ -15,6 +15,33 @@ date|time|sender_id|receiver_id|type(这个楼主有点记不清楚了，好像�
 2) fraction of ppl that response within 60s （这题我写的时候觉得有些tricky，其实只要self join就可以）
 
 
+我的题是这样的
+sender_id| receiver_id| action| date.1point3acres网
+sender_id: 动作发出者. 1point 3acres 论坛
+receiver_id: 动作接受者. Waral 博客有更多文章,
+action: {request, accept}
+date: 动作日期
+
+Q： 某一日的acceptance rate
+
+我开始写错了，写成了在某一天内所有的accept除以那天所有的request，后来面试官姐姐说她想要的是在某一天发出的所有request，共有多少被接收，我说那样的话需要把accpet和request都match起来，然后计算ratio
+
+select ifnull(sum(case when action = 'accept' then 1 else 0 end)/sum(case when action = 'request' then 1 else 0 end),0)
+from table. 牛人云集,一亩三分地
+where date = '2018-5-2'
+这是我第一版
+
+select ifnull(count(t2.date)/count(t1.date),0) as acceptance_rate
+from table t1 left join table t2 on t1.sender_id = t2.receiver_id and t1.receiver_id = t2.sender_id and t2.action = 'accept'
+where t1.action = 'request' and date = '2018-5-2'
+这是第二版. more info on 1point3acres
+. 1point 3acres 论坛
+可能我写的比较快，所以她没有别的任何意见就过了
+
+第二问是紧跟第一问的，如果某天Acceptance rate掉了10%，怎么处理？ 还有一些follow-up 问题，如果你新开发的feature，实现了20%的CTR，你如何
+评价这个feature是好的，也就是说你怎么评价这个20%是好还是坏？
+
+这部分，我答得一般，主要是面试官太challenging了，keep asking whatelse...后来阵脚就乱了
 
 
 
@@ -25,8 +52,23 @@ date|time|sender_id|receiver_id|type(这个楼主有点记不清楚了，好像�
 
 
 
+Select final_data.sending_time, sum(final_date.indicators)/count(final_date.indicators) as acceptance_rate from 
+Select . 1point 3acres 论坛
+        sending.sending_time
+        case when accepting.accepting_time is not null then 1 else 0 end as indicator
+from
+        (Select f1.actor_id, f1.target_id, min(f1.datetime) as sending_time from friending f1
+        Where f1.action = ‘request_sent’
+        Group by f1.actor_id, f1.target_id ) sending
+Left join -google 1point3acres
+        (Select f2.actor_id, f2.target_id, f2.datetime as accepting_time from friending f2
+        Where f2.action = ‘request_accepted’ ) accepting
+On (sending.actor_id = accepting.target_id) and (sending.target_id = accepting.actor_id). 围观我们@1point 3 acres
+) final_data
 
-
+补充内容 (2018-9-4 03:17):
+看了其他面经 据说是一个人可以发multiple friend request, 但是我不确定一个人能不能多次accept friend request
+最后一行少了一个 group by final_data.senidng_time
 
 
 试写一个，如有不对请指出

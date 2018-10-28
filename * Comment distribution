@@ -1,0 +1,8 @@
+sql是面经上的题，content_id, target_id, type(comment, post, like, photo), timestamp, user_id
+
+1)求comments数量的distribution
+2）求comment数量的distribution by type
+
+product sense 也是基于这个table的，问怎么判断comment是一个有内容，有意义，conversational的comment
+
+hr意思是说，面试官觉得你sql不错，但product sense 虽然not bad但没太在点上

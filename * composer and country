@@ -1,0 +1,106 @@
+SQL
+
+#1. Composer
+   user_id | date | event
+  event 可以是 'enter','post','cancel‘。每一次enter就有一个record，但是enter的内容可能被post或者被cancel。
+  Q：what is the average rate of succesufully post on last week?
+#2. User. 
+   user_id | date | country | au_flag. 牛人云集,一亩三分地
+  dau_flag：active user ，可以是0或者1
+Q： what is the average rate of post for daily active user by country on today.本文原创自1point3acres论坛
+注：一个user没有任何post也可能是active user
+Product
+      就是分析SQL 第二题的rate下降的原因，要怎么investigate。
+
+Enter完的结果有两个，分别是cancel或者post，也就是说对同一个user，post和cancel都是enter的子集
+
+题目不难，但是我写的不好。case when的时候还把end写掉了
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+想问问第二问average rate of post for daily active user是怎么定义的？
+如果还是求average rate of succesufully post(#post/#enter)那和第一题就一样了。。Post了东西的肯定是active user
+还是求#post/active user
+还是求# users posted/# active user
+楼主能不能帮忙clarify下呀~ 谢谢！
+
+第一题不太清楚cancel是在post完再cancel的吗？ 如果是，我觉得只要把Post的减去Cancel的就是Success的，再除以总Enter就是平均了。如果只能cancel enter, 把减号后面的删掉就行。
+这里只有user_id, 没有event_id.  否则严格意义上要Left Join 自己by event_id 然后减去所有到现在为止被删掉的event_id，而不仅仅是date=上周的cancel
+Select (SUM(IF(event='post',1,0))-SUM(IF(event='cancel',1,0)))/SUM(IF(event='enter',1,0)) as Avg_Rate 来源一亩.三分地论坛. 
+From 来源一亩.三分地论坛. 
+Composer
+Where date>='Sun' and date<='Sat'.1point3acres网
+
+第二题有点tricky，不能直接Join两个table 再limit Composer.date=today, 那样会把Null的都filter掉，得先筛选出今天的event再Left Join到今天的User上去。
+Select U.country, SUM(IF(C.post is NULL,0, post))/SUM(au_flag) as Avg_Rate
+From User
+Left Join
+(Select user_id, SUM(IF(event='post',1,0)) as post from Composer 
+Where date=current_date()) C
+On U.user_id=C.user_id.本文原创自1point3acres论坛
+Where U.date=current_date()
+Group By 1
+
+不知道做的对不对，还请大神指教。
+
+1..1point3acres网
+select sum(case when event = 'post' then 1 else 0 end)/
+sum(case when event = 'enter' then 1 else 0 end) as avg_rate
+from Composer
+where date <= '' and date >= ''
+2.
+select User.country,
+sum(COALESCE(post, 0))/sum(au_flag) as avg_rate
+from User
+left join
+        (select user_id, . 1point 3acres 论坛
+        sum(case when event = 'post' then 1 else 0 end)
+        as post
+        from Composer
+        where date = getdate()
+        group by user_id) A
+on User.user_id = A.user_id
+where User.date = getdate()
+group by User.country
+
+第二题写的时候感觉挺迷糊的，不知道对不对，还望大家指教
+
+Q1
+.1point3acres网
+SELECT SUM(CASE WHEN event = 'post' THEN 1 ELSE 0 END) / 
+        SUM(CASE WHEN event = 'enter' THEN 1 ELSE 0 END)
+FROM Composer
+WHERE date > (current_date - interval '7 days')-google 1point3acres
+
+Q2
+
+SELECT country, SUM(CASE WHEN event = 'post' THEN 1 ELSE 0 END) / . from: 1point3acres 
+        count(DISTINCT u.user_id)
+FROM User AS u CROSS JOIN Composer AS c
+        ON u.user_id = c.user_id
+        AND u.date = c.date
+WHERE au_flat = 1 and u.date = current_date
+GROUP BY country
+
+
+

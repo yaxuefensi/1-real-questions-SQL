@@ -15,3 +15,15 @@ Q2 给了第二个table   date  phone_number  这个表就是confirm了 confirma
 算每天 confirmation rate 来源一亩.三分地论坛. 
 
 Product  就是 在 newsfeed 里面加 friend recommendation  这个feature 好不好~
+
+SQL text message 题. 牛人云集,一亩三分地
+table1: date, carrier, country, phone_number, type {friend_notice, confirmation, xxx不记得了}
+求昨天给多少手机号发了confirmation message？
+
+《注意duplicate 手机号的处理》. 1point3acres
+
+table2: date, phone_number. From 1point 3acres bbs
+这是所有confirm了confirmation text的手机号-google 1point3acres
+. Waral 博客有更多文章,
+问每天confirmation rate？.本文原创自1point3acres论坛
+《注意duplicate 手机号，注意time window，注意fraud》

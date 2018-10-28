@@ -30,6 +30,10 @@ Q: 1.What is the total number of comments and total number of posts?
 3. How to get the nick name of each facebook user suach david - dave , and if we already have the data how can we use it?
 [/hide]
 
+有个table,有content_id, content_type,target_id  其中content_type有post,comment,like,photo等, target_id 是comment 对应的post_id(for example)
+
+Q1: 求最多comment的post 的id
+Q2:求comment数目的分布
 
 
 补充内容 (2017-3-26 07:43):

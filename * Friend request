@@ -7,3 +7,51 @@ date|time|sender_id|receiver_id|type(这个楼主有点记不清楚了，好像�
 2) calcualte the trend of acceptance rate
 这道题楼主最开始写错了，忘记join table的condition。面试官是一个中国大哥，特别nice，他指出来了，我改正了。
 然后他suggest我们要有一个Time period, 如果过了一个time period那不我们就不count这个request了。这个我用的datediff。
+
+电面第一次：
+1）SQL：
+有记录message的table有这些column：date | ts | sender_id | receiver_id 
+问 1) find fraction of ppl messaging >= 5 ppl each day
+2) fraction of ppl that response within 60s （这题我写的时候觉得有些tricky，其实只要self join就可以）
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+试写一个，如有不对请指出
+        
+        1) Select date, ts, count(*) 来源一亩.三分地论坛. 
+          from TABLE
+          group by date, ts
+          Having count(*) >=5. 1point 3acres 论坛
+        2) 
+        Select count(distinct Quick.sender_id)/count(distinct Table.sender_id) . from: 1point3acres 
+        from. 围观我们@1point 3 acres
+        (Select S.sender_id, S.ts as ts_send, R.sender as responde_id, R.ts as ts_responde. From 1point 3acres bbs
+        From table S, table R
+        Where S.reciever = R.sender
+        And S.sender = R.reciever 
+        And seconds_between (S.ts,R.ts) <= 60
+        And seconds_between (S.ts,R.ts)  >=0) as Quick, TABLE
+ 
+ 
+ 2.
+select count(case when ts-lag_ts<=60 then distinct responder_id end)/count(distinct responder_id) as rate
+from 
+(select a.*, lag(ts) over (partition by sender_id, responder_id order by date, ts) as lag_ts
+from table a
+)
+这个答案错了。。
+
+

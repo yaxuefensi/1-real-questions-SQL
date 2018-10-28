@@ -1,0 +1,105 @@
+Q1: how many posts were reported yesterday for each report Reason? . from: 1point3acres 
+Table: user_actions
+ds(date, String) | user_id | post_id | action ('view','like','reaction','comment','report','reshare') | extra (extra reason for the action, e.g. 'love','spam','nudity')
+
+Q2: introduce a new table: reviewer_removals, please calculate what percent of daily content that users 
+view on FB is actually spam? no need to consider if the removal happen at the same post date or not
+ds(date, String) | reviewer_id |post_id
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+自己尝试写了一下，还麻烦大家看看对不对，请指教！
+SELECT extra AS reason, COUNT(DISTINCT post_id) as num. visit 1point3acres for more.
+FROM user_actions
+WHERE date = dateadd(day, -1, getdate())
+AND action = 'report'
+GROUP BY reason;. Waral 博客有更多文章,
+
+SELECT u.date, COUNT(DISTINCT r.post_id)/COUNT(DISTINCT u.post_id) as spam_percentage
+FROM user_actions u. 一亩-三分-地，独家发布
+LEFT JOIN reviewer_removals r. 1point 3acres 论坛
+ON u.post_id = r.post_id 来源一亩.三分地论坛. 
+WHERE u.action = 'view'. 1point 3acres 论坛
+GROUP BY u.date;
+
+第一题我也这样写的
+第二小题  left join 如果出现null，是不是要用case when 处理一下呢
+
+如果我理解没错的话，null的时候就不会count在分子里了吧？
+比如说left join之后table是这样的：
+u.postid  |    r.postid  (其他column省略)
+123                 123
+456                 null
+789                 789. From 1point 3acres bbs
+这样分子count出来是2，分母count出来是3
+
+我想你说的是对的  是我多此一举了  count（column_name） 会自动剔除null的case
+
+
+
+写了一下第二题
+select sum(coalesce(r.post_id),0,1) / count(distinct u.post_id) as spam_percentage
+from user_actions u
+left join reviewer_removal r
+on r.post_id = u.post_id
+where action = 'view'
+group by u.ds;
+
+不知道product题目有谁可以说说思路的，如何design algorithm？谢谢~~
+
+感謝分享，這個好像是新題誒。
+
+想問下user_actions table裏的extra 是衹有在report 的時候有value，其他情況是空麽
+還有所有reviewer_removals  table裏的post都是spam 是麽？
+
+product spam filter metric 可以用上面table 裏的數據麽？然後根據follow up question，似乎revenue 也應該作爲一個metric，是這樣麽？謝謝！
+
+Yes.-google 1point3acres
+Yes.
+我当时答的时候没想那么多，但是我也把revenue 作为一个high level metric 给了面试官了
+
+
+myhong 发表于 2018-10-2 09:33
+Q1和Q2在我看来是一个题目啊，请问楼主怎么答
+
+Q1 问的是metric
+Q2 是experiment design
+
+以下仅是我的想法，供大家参考，如果我想错了，感谢大家帮我纠正：
+
+考虑到POST_ID本身就是DISTINCT和EXTRA ACTION只在"REPORT"ACTION 有值的时候有值，其余时候为NULL.. 1point 3acres 论坛
+第一题我写的是：
+Select count(post_id) as postofyesterday
+from user_actions
+where date=date_add(curdate(),interval -1 day)
+group by extra
+;
+
+第二题，我理解的是用户自报的SPAM有多少是真的SPAM,真的SPAM会被REVIEWER REMOVE,所以真Spam的POSTID会出现
+在REVIEWER_REMOVALTable 里:. 1point 3acres 论坛
+
+Select (sum(case when reviewer_removals.post_id=null then 0 else 1 end)/count(*)) as spamrate 
+from 
+user_actions left join reviewer_removals 
+on user_actions.post_id=reviewer_removals.post_id
+where user_actions.extra='spam'
+;
+
+我还考虑到这是说的GENERAl daily spam rate,所以就没有用GROUP BY DATE.不知道是不是这个意思
+
+

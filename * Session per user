@@ -1,0 +1,78 @@
+数据表有两张，均为user log, 对于A表：每一次用户进入页面分派一个unique session id，用户离开则这一个session结束，期间用户的每一个行为都会生成一条记录；对于表B：记录一条session存在的时间。. 留学申请论坛-一亩三分地
+A: date, session_id, user_id, act('enter', 'exit', 'post')
+B: date, session_id, time_spent
+
+Q1：generate average number of session per user per day. 
+
+date	      average_number_session_per_user
+2018-09-09	30
+Q2: generate number of user per time interval. in order to measure how many user is spending certain amount of time. 比如： 
+
+time_spent	number_of_user
+0	           4
+1	           6
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Q1.
+Select date, count(sub.session_id)/count(sub.user_id) as average_number_session_per_user from
+(Select distinct date, user_id, session_id from tableA) sub
+group by date.留学论坛-一亩-三分地
+
+Q2.
+. From 1point 3acres bbs
+Select tableB.time_spend, count(sub.user_id) from tableB
+Inner join 
+(Select distinct session_id, user_id from tableA) sub
+On (tableB.session_id = sub.session_id)
+Group by tableB.time_spend
+
+其实我觉得q2 似乎没有join tableA 的必要 因为
+
+补充内容 (2018-9-15 05:03):.本文原创自1point3acres论坛
+因为一个unique session_id 肯定对应一个unique user_id 所以自己count (session_id)就好了 就怕这么想简单了
+
+Q1正解，可以更简化为count(distinct***)，这样去掉下面一层query
+
+Q2因为当时和我confirm要算用户的平均耗时，所以感觉大致是
+select sub.avg_time, count(sub.user_id) from
+(select A.user_id, avg(B.time_spent) as avg_time
+from A join B on A.session_id = B.session_id
+group by user_id)sub.1point3acres网
+group by sub.avg_time
+
+补充内容 (2018-9-15 07:50):
+session_id 和 user_id不是一一对应关系啊，一个用户这一次进入网站到退出算一个session，下次再来就是另一个session了。所以是多对一的关系。
+
+哦 我懂了… 多个session_id对应的一个user 但是题目看的是user 不是session…
+
+需不需要 date 和 session都 要join. From 1point 3acres bbs
+因为会不会今天来了的第一个session = 1 明天开始的第一个session还是1
+
+SELECT time_spent, count(distinct A.user_id) as number_of_user. more info on 1point3acres
+FROM
+(
+SELECT A.user_id,AVG(B.time_spent) as time_spent
+FROM user_log A. 1point 3acres 论坛
+JOIN session B ON A.date = B.date and A.session_id = B.session_id
+GROUP BY 1. From 1point 3acres bbs
+)
+GROUP BY 1
+
+如果一个用户 在第一天有三个动作， 在第二天有两个动作， 那么你这么算就不对了。我自己的办法是需要算多一层sub query可以求出正确答案

@@ -78,4 +78,20 @@ per unit cost, 没必要了，想想就是要么用conversion count rate, 要么
 更在乎点击率的时候（e.g. marketing campaign）ROI不好
 
 
+sql: 两个table-google 1point3acres
+     ads: date|advertiser_id|ad_id|spend
+     user: date|user_id|ad_id|price
+1) 求average/total spend per advertiser today(不好意思忘记是average还是total了). 一亩-三分-地，独家发布
+追问：after we get this table, what will the distribution look like?
+
+如果我没看错面试管听到我回到后的表情 我觉得应该是long tail的distribution
+
+2) how many advertisers have at least one conversion 
+
+product: metrics to measure the health of group product(group是fb的一个产品)
+
+
+
+
+
 

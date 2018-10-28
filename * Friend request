@@ -44,11 +44,57 @@ where t1.action = 'request' and date = '2018-5-2'
 这部分，我答得一般，主要是面试官太challenging了，keep asking whatelse...后来阵脚就乱了
 
 
+Table：Date, Timestamp, sender_id, receiver_id-google 1point3acres
+
+这是一个记录messenger内聊天状态的table，用于显示谁在何时给谁发了消息。
+
+Q1：找到今天和五个以上不同的人聊过天的人
+Q2:   找到发消息后一分钟内得到回复的人
+
+在做第一题的时候我很快给出了一个思路，然而写出来以后面试官提示说有问题，但是我已经有点卡在原来的思路里出不来了，思考了几分钟还是没给出答案，心理压力越来越大，最后面试官已经要给提示了，我才突然反应过来抢先说了自己的想法，面试官说我感觉你已经想到了，让我口述一下写法，我说了以后他表示正确。. more info on 1point3acres
+
+第二题一分钟内写完，面试官表示没有问题。
 
 
 
 
 
+
+
+
+
+我的做法 请指正 也欢迎同样在刷题的小伙伴可以私信我微信 我们拉个群一起刷 
+Q1
+Select id from 
+(Select sender_id as id, count (distinct receiver_id) as chat from table where date = curdate() group by sender_id
+Union
+Select receiver_id as id, count (distinct sender_id) as chat from table where date = curdate() group by receiver_id) sub
+Group by id
+Having count (distinct chat) >5
+Q2
+Select distinct t1.sender_id
+From table t1, table t2
+Where t1.sender_id=t2.receiver_id
+And t1.receiver_id=t2.sender_id
+And t2.timestamp-t1.timestamp<=60
+
+我觉得第一问不太对吧。我觉得应该是这样的吧：
+select distinct id 
+from
+(Select sender_id as id, count(distinct receiver_id) as cnt
+From table
+where date=curdate()
+group by sender_id
+having count(distinct receiver_id) >5
+union-google 1point3acres
+Select receiver_id as id, count(distinct sender_id) as cnt
+From table.1point3acres网
+where date= curdate()
+group by receiver_id
+having count(distinct sender_id) >5) a
+
+补充内容 (2018-6-9 04:15):
+不对，我也想错了。这里应该用inner join，把收过5条和发过5条以上的按照id join在一起。
 
 
 

@@ -121,4 +121,30 @@ where user_actions.extra='spam'
 
 我还考虑到这是说的GENERAl daily spam rate,所以就没有用GROUP BY DATE.不知道是不是这个意思
 
+谢谢楼主的信息， 我想请教一下第二题SQL， 好像我感觉不需要用到第二个table？还是我脑子变蠢了。。求哪位大神指导一下第二题！万分感谢
+
+补充内容 (2018-10-9 06:18):. 围观我们@1point 3 acres
+诶~ 我好像明白了。。。真的spam是只会在reviewer那个table里面的，所以要join两个table再算。。。
+
+写了一下sql，第二题我写的有点简化，具体情况可能需要讨论一下post id是不是unique的
+1. Select extra,
+count(distinct post_id) as posts. 1point3acres
+From posts
+Where date=curdate()-1
+And content_type=’report’
+Group by 1;
+
+2.--Let’s just assume they are posted yesterday, and each post is only reviewed once-google 1point3acres
+--Or if they can be reviewed multiple times, we need to dedup
+--and we set the the review window to be the same day(or it could be extended)
+Select sum(case when b.post_id is not null then 1 else 0 end)*1.00/count(distinct post_id) as ratio
+From posts a
+Left join 
+(select distinct date, post_id 
+  from review_removal
+  Where date=curdate()-1) b
+On a.post_id=b.post_id
+Where a.date=curdate()-1
+And a.content_type=’view’;
+
 

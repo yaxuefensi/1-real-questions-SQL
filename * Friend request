@@ -1,0 +1,9 @@
+高频的friend request题目. 1point3acres
+table
+date|time|sender_id|receiver_id|type(这个楼主有点记不清楚了，好像是comment/friend_request.... )
+
+
+1) calculate the friend requests on a specific date
+2) calcualte the trend of acceptance rate
+这道题楼主最开始写错了，忘记join table的condition。面试官是一个中国大哥，特别nice，他指出来了，我改正了。
+然后他suggest我们要有一个Time period, 如果过了一个time period那不我们就不count这个request了。这个我用的datediff。

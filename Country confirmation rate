@@ -1,0 +1,17 @@
+算是很简单了，， 但是紧张，开始还是犯了很低级的错误， 不过后面改正了。。。 
+date, country, carrier,phone_number, type (type 里有个很多种，例如 friend_request,  confirmation )
+Q1 算每个country， carrier 的 #of phone_number 发了confirmation 信息。。。 是不是很简单， 弱智的我开始紧张还是写错了，，， 
+Q2 给了第二个table   date  phone_number  这个表就是confirm了 confirmation 的信息的 表格。。。
+算每天 confirmation rate 
+
+Product  就是 在 newsfeed 里面加 friend recommendation  这个feature 好不好~
+
+
+
+算是很简单了，， 但是紧张，开始还是犯了很低级的错误， 不过后面改正了。。。 
+date, country, carrier,phone_number, type (type 里有个很多种，例如 friend_request,  confirmation )
+Q1 算每个country， carrier 的 #of phone_number 发了confirmation 信息。。。 是不是很简单， 弱智的我开始紧张还是写错了，，， 
+Q2 给了第二个table   date  phone_number  这个表就是confirm了 confirmation 的信息的 表格。。。
+算每天 confirmation rate 来源一亩.三分地论坛. 
+
+Product  就是 在 newsfeed 里面加 friend recommendation  这个feature 好不好~

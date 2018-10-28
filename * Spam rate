@@ -6,6 +6,25 @@ Q2: introduce a new table: reviewer_removals, please calculate what percent of d
 view on FB is actually spam? no need to consider if the removal happen at the same post date or not
 ds(date, String) | reviewer_id |post_id
 
+面试当天用的是 bluejeans 这个视频平台，同时在 codepad 上写代码。面试官先自我介绍了将近10分钟，详细讲了自己在 Facebook 各个
+组的经历。然后是我自我介绍，然后会问几个简历上的项目，如果是机器学习相关的，就会问 loss function, performance measure 这些。
+
+Q1: Given the table about posts
+date | user_id | post_id | content_type | extra
+
+content_type: 'view', 'comment', 'photo', 'report'
+extra: post text, comment text, report type = {'SPAM', ...}
+
+. from: 1point3acres 
+Q: What is the total number of posts posted yesterday for each type of report?
+
+
+Q2: When a post is reported by the user as spam, the reviewers will manually review and remove them. Given the table about review_removal
+
+date | reviewer_id | post_id
+
+What percentage of the posts viewed by the users yesterday is reported as spam?
+
 
 
 

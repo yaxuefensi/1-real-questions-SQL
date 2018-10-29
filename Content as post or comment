@@ -4,9 +4,27 @@ CONTENT_ID|| CONTENT_TYPE || TARGET_ID
 123|| COMMENT || 100 
 100|| POST || NULL  
 
-
+SELECT target_id, COUNT(*)
+FROM
+(
+SELECT target_id
+FROM content_actions
+WHERE content_type = 'comment'
+) AS comment_tbl
+GROUP BY target_id
+ORDER BY COUNT(*) DESC;
 
 2) 如果现在content_type变成post, video, photo,article，要求计算每一个content type的comment distribution。 
+? Can we assume that the target_id is NULL is 'post, video, photo, article'?
+
+
+
+SELECT content_id, content_type
+FROM content_actions
+LEFT JOIN
+(SELECT content_id, target_id,content_type
+FROM content_actions
+WHERE content_type = 'comment')
 
 
 3) Story includes either photo or post . Generate a distribution for the#comments per story. 

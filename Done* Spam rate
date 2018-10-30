@@ -1,9 +1,11 @@
-Q1: how many posts were reported yesterday for each report Reason? . from: 1point3acres 
+Q1: how many posts were reported yesterday for each report Reason? 
 Table: user_actions
-ds(date, String) | user_id | post_id | action ('view','like','reaction','comment','report','reshare') | extra (extra reason for the action, e.g. 'love','spam','nudity')
+ds(date, String) | user_id | post_id | action ('view','like','reaction','comment','report','reshare') | extra (extra reason 
+for the action, e.g. 'love','spam','nudity')
 
 Q2: introduce a new table: reviewer_removals, please calculate what percent of daily content that users 
 view on FB is actually spam? no need to consider if the removal happen at the same post date or not
+
 ds(date, String) | reviewer_id |post_id
 
 面试当天用的是 bluejeans 这个视频平台，同时在 codepad 上写代码。面试官先自我介绍了将近10分钟，详细讲了自己在 Facebook 各个
@@ -15,15 +17,27 @@ date | user_id | post_id | content_type | extra
 content_type: 'view', 'comment', 'photo', 'report'
 extra: post text, comment text, report type = {'SPAM', ...}
 
-. from: 1point3acres 
+
 Q: What is the total number of posts posted yesterday for each type of report?
 
+My solution:
+SELECT content_type, COUNT(DISTINCT post_id) AS type_cnt
+FROM post
+WHERE date = DATEADD(day,-1,curdate())
+GROUP BY content_type
+;
 
-Q2: When a post is reported by the user as spam, the reviewers will manually review and remove them. Given the table about review_removal
+Q2: When a post is reported by the user as spam, the reviewers will manually review and remove them. 
+Given the table about review_removal
 
 date | reviewer_id | post_id
 
 What percentage of the posts viewed by the users yesterday is reported as spam?
+
+1) if only see the percentage for yesterday:
+
+
+
 
 
 

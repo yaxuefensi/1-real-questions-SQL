@@ -1,0 +1,118 @@
+
+面经题friending trend, 
+action_id | target_id | action{‘sent’,’accept’,’unfriend’} | date
+    
+1) 要求计算每个人的好友
+2) 如何判断两个人是不是好朋友
+
+table friending： 
+action_id, target_id, action （accept, request, unfriend), date, time.
+1：overall friend accept rate.  
+2：who has most friends.
+
+1) 要求计算每个人的好友
+
+SELECT tbl.action_id, COUNT(DISTINCT tbl.target_id) AS friend_cnt
+FROM
+(
+SELECT sent.action_id AS action_id, sent.target_id AS target_id
+FROM
+(
+SELECT DISTINCT action_id, target_id
+FROM friending
+WHERE action = 'sent'
+) AS sent
+JOIN
+(
+SELECT DISTINCT action_id,target_id
+FROM friending
+WHERE action = 'accept'
+) AS accept
+ON sent.action_id = accept.target_id AND sent.target_id = accept.action_id
+UNION
+SELECT DISTINCT action_id,target_id
+FROM friending
+WHERE action = 'accept'
+) AS tbl
+GROUP BY tbl.action_id;
+
+2：who has most friends.
+
+SELECT tbl.action_id, COUNT(DISTINCT tbl.target_id) AS friend_cnt
+FROM
+(
+SELECT sent.action_id AS action_id, sent.target_id AS target_id
+FROM
+(
+SELECT DISTINCT action_id, target_id
+FROM friending
+WHERE action = 'sent'
+) AS sent
+JOIN
+(
+SELECT DISTINCT action_id,target_id
+FROM friending
+WHERE action = 'accept'
+) AS accept
+ON sent.action_id = accept.target_id AND sent.target_id = accept.action_id
+UNION
+SELECT DISTINCT action_id,target_id
+FROM friending
+WHERE action = 'accept'
+) AS tbl
+GROUP BY tbl.action_id
+ORDER BY friend_cnt DESC
+LIMIT 1;
+
+3. overall friend accept rate.  
+? NO time limit?
+
+SELECT ROUND(IFNULL(COUNT(accept.action_id)/COUNT(sent.action_id),0),2) AS friend_accept_rate
+FROM
+(
+SELECT DISTINCT action_id, target_id
+FROM friending
+WHERE action = 'sent'
+) AS sent
+LEFT JOIN
+(
+SELECT DISTINCT action_id,target_id
+FROM friending
+WHERE action = 'accept'
+) AS accept
+ON sent.action_id = accept.target_id AND sent.target_id = accept.action_id
+
+
+
+
+
+
+
+One reply like:
+Assume actionI-id is the user who initiate the action. Otherwise there is no way to resolve the question.
+create table new_friend stored as parquet as 
+select action_id as user, target_id as friend from friending as f1 . 1point 3acres 论坛
+where  action = 'accept'
+union 
+select target_id as user, action_id as friend from friending as f2
+where action = 'accept'
+
+create table unfriend stored as parquet as. from: 1point3acres 
+select action_id as user, target_id as friend from friending as f1 
+where  action = 'unfriend'
+union . 
+select target_id as user, action_id as friend from friending as f2
+where action = 'unfriend'. visit 1point3acres for more.
+
+#get every one's friend. From 1point 3acres bbs
+select n.user, count(1) as cnt from new_friend as n
+left join unfriend as u on n.user = u.unfriend
+where unfriend is null
+
+set check_id1 = ?;.1point3acres网
+set check_id2 = ?;
+
+select count(1) as cnt from new_friend as n
+left join unfriend as u on n.user = u.unfriend 来源一亩.三分地论坛. 
+where unfriend is null and n.user = ? and n.friend = ?
+

@@ -19,7 +19,24 @@ GROUP BY date, user_id
 ORDER BY AVG(session_id) DESC;
 
 Q2:
+1) iF don't need to consider DATE
 
+SELECT  CASE WHEN total_time<60 THEN 'less than 60 min' 
+             WHEN total_time<120 THEN 'less than 120 min, more than 60 min'
+             WHEN total_time<180 THEN 'less than 180 min, more than 120 min'
+         ELSE 'equal to or more than 180 mins'
+         END AS 'TIME SPENT',
+         COUNT(DISTINCT user_id) AS num_of users
+FROM
+(
+SELECT user_id,SUM(time_spend) AS total_time
+FROM tablea
+JOIN tableb
+ON tablea.session_id = tableb.session_id 
+GROUP BY user_id
+) AS tbl
+GROUP BY 1
+;
 
 
 
@@ -41,14 +58,17 @@ Q2:
 
 Q1.
 Select date, count(sub.session_id)/count(sub.user_id) as average_number_session_per_user from
-(Select distinct date, user_id, session_id from tableA) sub
-group by date.留学论坛-一亩-三分地
+(Select distinct date, user_id, session_id 
+from tableA) sub
+group by date
 
 Q2.
-. From 1point 3acres bbs
-Select tableB.time_spend, count(sub.user_id) from tableB
+
+Select tableB.time_spend, count(sub.user_id) 
+from tableB
 Inner join 
-(Select distinct session_id, user_id from tableA) sub
+(Select distinct session_id, user_id 
+from tableA) sub
 On (tableB.session_id = sub.session_id)
 Group by tableB.time_spend
 
@@ -60,10 +80,13 @@ Group by tableB.time_spend
 Q1正解，可以更简化为count(distinct***)，这样去掉下面一层query
 
 Q2因为当时和我confirm要算用户的平均耗时，所以感觉大致是
+
 select sub.avg_time, count(sub.user_id) from
 (select A.user_id, avg(B.time_spent) as avg_time
-from A join B on A.session_id = B.session_id
-group by user_id)sub.1point3acres网
+from A 
+join B 
+on A.session_id = B.session_id
+group by user_id)sub
 group by sub.avg_time
 
 补充内容 (2018-9-15 07:50):
@@ -71,7 +94,7 @@ session_id 和 user_id不是一一对应关系啊，一个用户这一次进入�
 
 哦 我懂了… 多个session_id对应的一个user 但是题目看的是user 不是session…
 
-需不需要 date 和 session都 要join. From 1point 3acres bbs
+需不需要 date 和 session都 要join. 
 因为会不会今天来了的第一个session = 1 明天开始的第一个session还是1
 
 SELECT time_spent, count(distinct A.user_id) as number_of_user. more info on 1point3acres

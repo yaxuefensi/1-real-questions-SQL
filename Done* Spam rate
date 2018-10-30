@@ -172,4 +172,75 @@ On a.post_id=b.post_id
 Where a.date=curdate()-1
 And a.content_type=’view’;
 
+关于spam的，
+	table1:
+	date || user_id || post_id || action {report, like, comment} || report_reason {spam, nudity, ...}
+	
+
+	table 2:
+	reviewer_id || post_id || date
+	
+
+	第一题，昨天report的spam有多少
+	
+
+	第二题，每天user看到的post里有多少是spam。
+	
+
+	SQL 题，
+	
+
+	给两个table，
+	
+
+	一个是  | 日期 ds | user_id |  poster_id | activity | comments | 
+	
+
+	comments 里面包含 ‘spam’， ‘others“
+	
+
+	另一个table，
+	
+
+	｜ds ｜ reviewer_id | poster_id |
+	
+
+	计算每天 spam中被 reviewer 确定为 spam 的rate。
+	
+
+	挂了，  
+	自己对SQL还是理解的不对。
+	
+
+	SELECT t3.ds, t3.spamreview/t5.spam_report as spam_rate
+	FROM 
+	(SELECT t1.ds, sum(CASE WHEN t1.comments ='spam' THEN 1 ELSE 0 END) as spamreview
+	FROM user_reaction t1 INNER JOIN reviewer t2 ON (t1.ds = t2.ds AND t1.post_id = t2.post_id)
+	GRoup by t1.ds) as t3   
+	LEFT JOIN
+	(SELECT ds, SUM(CASE WHEN comments = 'spam' THEN 1 ELSE 0 END) as spam_report FROM user_reaction group by ds) AS t5 ON (t3.ds = t5.ds);
+	
+
+	我的理解是：需要求用户自己report spam/被REVIEWEer 看了之后确定是Spam的概率，即真正的SPAM概率。
+	，因为用户report后并不一定会当天被系统审核，所以求出这个整体平均，不需要罗列出每天的，
+	所以我理解的CODE是这样，如有错误请指正。
+	
+
+	select sum(case when t2.poster_id is null then 0 else 1 end)*1.0/count(*) as spamrate
+	. visit 1point3acres for more.
+	from 
+	table1 t1 left join table2 t2. from: 1point3acres 
+	on t1.poster_id=t2.poster_id
+	
+
+	where t1.comments='spam'
+	;
+	你这个答案不对。你有没有考虑过，一个spam的post_id， 有可能有很多人去report， 所以你第一步要先找出每天
+	的distinct post_id, 然后才做后面的join 和计算
+	
+
+	谢谢回复。
+	我是想的是一个POSTER ID重复发SPAM N次，在LEFT JOIN的时候也会出现N次。因为题目求的是SPAM　RATE,如果是
+	求SPAM POSTER RATE的话，我觉得确实需要用DISTINCT来区分，不然某个重复发SPAM的POSTER会影响计算。
+	你的想法是什么？谢谢啊
 

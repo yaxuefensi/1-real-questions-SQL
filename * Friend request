@@ -1,4 +1,4 @@
-高频的friend request题目. 1point3acres
+高频的friend request题目
 table
 date|time|sender_id|receiver_id|type(这个楼主有点记不清楚了，好像是comment/friend_request.... )
 
@@ -8,34 +8,78 @@ date|time|sender_id|receiver_id|type(这个楼主有点记不清楚了，好像�
 这道题楼主最开始写错了，忘记join table的condition。面试官是一个中国大哥，特别nice，他指出来了，我改正了。
 然后他suggest我们要有一个Time period, 如果过了一个time period那不我们就不count这个request了。这个我用的datediff。
 
-电面第一次：
-1）SQL：
-有记录message的table有这些column：date | ts | sender_id | receiver_id 
-问 1) find fraction of ppl messaging >= 5 ppl each day
-2) fraction of ppl that response within 60s （这题我写的时候觉得有些tricky，其实只要self join就可以）
-
 
 我的题是这样的
-sender_id| receiver_id| action| date.1point3acres网
-sender_id: 动作发出者. 1point 3acres 论坛
-receiver_id: 动作接受者. Waral 博客有更多文章,
+sender_id| receiver_id| action| date
+sender_id: 动作发出者
+receiver_id: 动作接受者
 action: {request, accept}
 date: 动作日期
 
 Q： 某一日的acceptance rate
 
-我开始写错了，写成了在某一天内所有的accept除以那天所有的request，后来面试官姐姐说她想要的是在某一天发出的所有request，共有多少被接收，我说那样的话需要把accpet和request都match起来，然后计算ratio
+My Solution:
+To confirm question, does thie mean the for all the requests sent in this day, how many of them are accepted, the 
+ratio is the acceptance rate?  
+1) Do we have a time limit as to how long the request can be waiting? 
+2) Can a sender send multiple requests to one receiver? My experience is that once you click the 'add friend' button on facebook,
+the button will change to 'friend request sent'. So A send cannot send multiple requests to one receiver. Am I resonable? 
+3) Can a receiver accept multiple requests from one sender?
+
+If no limit:
+
+SELECT ROUND(IFNULL(COUNT(accept_tbl.sender_id)/COUNT(request_tbl.sender_id),0),2)
+FROM
+(
+SELECT sender_id, reciever_id
+FROM table
+WHERE action = 'request' and date = '2018-10-28'
+) AS request_tbl
+LEFT JOIN
+(
+SELECT sender_id, receiver_id
+FROM table
+WHERE action = 'accept' AND date>= '2018-10-28'
+) AS accept_tbl
+ON request_tbl.sender_id = accept_tbl.receiver_id
+ AND request_tbl.receiver_id = accept_tbl.sender_id
+ 
+ IF there is a limit, for example, receiver has to accept within 18 hours. 
+
+SELECT ROUND(IFNULL(COUNT(accept_tbl.sender_id)/COUNT(request_tbl.sender_id),0),2) AS accept_rate
+FROM
+(
+SELECT sender_id, reciever_id,time
+FROM table
+WHERE action = 'request' and date = '2018-10-28'
+) AS request_tbl
+LEFT JOIN
+(
+SELECT sender_id, receiver_id, time
+FROM table
+WHERE action = 'accept'
+) AS accept_tbl
+ON request_tbl.sender_id = accept_tbl.receiver_id
+AND request_tbl.receiver_id = accept_tbl.sender_id
+WHERE DATEDIFF(hour,request_tbl.time,accept_tbl.time) <18
+
+
+
+我开始写错了，写成了在某一天内所有的accept除以那天所有的request，后来面试官姐姐说她想要的是在某一天发出的所有request，共有多少被接收，
+我说那样的话需要把accpet和request都match起来，然后计算ratio
 
 select ifnull(sum(case when action = 'accept' then 1 else 0 end)/sum(case when action = 'request' then 1 else 0 end),0)
-from table. 牛人云集,一亩三分地
+from table. 
 where date = '2018-5-2'
 这是我第一版
 
 select ifnull(count(t2.date)/count(t1.date),0) as acceptance_rate
-from table t1 left join table t2 on t1.sender_id = t2.receiver_id and t1.receiver_id = t2.sender_id and t2.action = 'accept'
+from table t1 
+left join table t2 
+on t1.sender_id = t2.receiver_id and t1.receiver_id = t2.sender_id and t2.action = 'accept'
 where t1.action = 'request' and date = '2018-5-2'
-这是第二版. more info on 1point3acres
-. 1point 3acres 论坛
+这是第二版. 
+
 可能我写的比较快，所以她没有别的任何意见就过了
 
 第二问是紧跟第一问的，如果某天Acceptance rate掉了10%，怎么处理？ 还有一些follow-up 问题，如果你新开发的feature，实现了20%的CTR，你如何
@@ -44,72 +88,21 @@ where t1.action = 'request' and date = '2018-5-2'
 这部分，我答得一般，主要是面试官太challenging了，keep asking whatelse...后来阵脚就乱了
 
 
-Table：Date, Timestamp, sender_id, receiver_id-google 1point3acres
-
-这是一个记录messenger内聊天状态的table，用于显示谁在何时给谁发了消息。
-
-Q1：找到今天和五个以上不同的人聊过天的人
-Q2:   找到发消息后一分钟内得到回复的人
-
-在做第一题的时候我很快给出了一个思路，然而写出来以后面试官提示说有问题，但是我已经有点卡在原来的思路里出不来了，思考了几分钟还是没给出答案，心理压力越来越大，最后面试官已经要给提示了，我才突然反应过来抢先说了自己的想法，面试官说我感觉你已经想到了，让我口述一下写法，我说了以后他表示正确。. more info on 1point3acres
-
-第二题一分钟内写完，面试官表示没有问题。
-
-
-
-
-
-
-
-
-
-我的做法 请指正 也欢迎同样在刷题的小伙伴可以私信我微信 我们拉个群一起刷 
-Q1
-Select id from 
-(Select sender_id as id, count (distinct receiver_id) as chat from table where date = curdate() group by sender_id
-Union
-Select receiver_id as id, count (distinct sender_id) as chat from table where date = curdate() group by receiver_id) sub
-Group by id
-Having count (distinct chat) >5
-Q2
-Select distinct t1.sender_id
-From table t1, table t2
-Where t1.sender_id=t2.receiver_id
-And t1.receiver_id=t2.sender_id
-And t2.timestamp-t1.timestamp<=60
-
-我觉得第一问不太对吧。我觉得应该是这样的吧：
-select distinct id 
-from
-(Select sender_id as id, count(distinct receiver_id) as cnt
-From table
-where date=curdate()
-group by sender_id
-having count(distinct receiver_id) >5
-union-google 1point3acres
-Select receiver_id as id, count(distinct sender_id) as cnt
-From table.1point3acres网
-where date= curdate()
-group by receiver_id
-having count(distinct sender_id) >5) a
-
-补充内容 (2018-6-9 04:15):
-不对，我也想错了。这里应该用inner join，把收过5条和发过5条以上的按照id join在一起。
-
-
 
 Select final_data.sending_time, sum(final_date.indicators)/count(final_date.indicators) as acceptance_rate from 
-Select . 1point 3acres 论坛
+Select 
         sending.sending_time
         case when accepting.accepting_time is not null then 1 else 0 end as indicator
 from
-        (Select f1.actor_id, f1.target_id, min(f1.datetime) as sending_time from friending f1
+        (Select f1.actor_id, f1.target_id, min(f1.datetime) as sending_time 
+        from friending f1
         Where f1.action = ‘request_sent’
         Group by f1.actor_id, f1.target_id ) sending
-Left join -google 1point3acres
-        (Select f2.actor_id, f2.target_id, f2.datetime as accepting_time from friending f2
+Left join 
+        (Select f2.actor_id, f2.target_id, f2.datetime as accepting_time 
+        from friending f2
         Where f2.action = ‘request_accepted’ ) accepting
-On (sending.actor_id = accepting.target_id) and (sending.target_id = accepting.actor_id). 围观我们@1point 3 acres
+On (sending.actor_id = accepting.target_id) and (sending.target_id = accepting.actor_id). 
 ) final_data
 
 补充内容 (2018-9-4 03:17):
@@ -117,29 +110,5 @@ On (sending.actor_id = accepting.target_id) and (sending.target_id = accepting.a
 最后一行少了一个 group by final_data.senidng_time
 
 
-试写一个，如有不对请指出
-        
-        1) Select date, ts, count(*) 来源一亩.三分地论坛. 
-          from TABLE
-          group by date, ts
-          Having count(*) >=5. 1point 3acres 论坛
-        2) 
-        Select count(distinct Quick.sender_id)/count(distinct Table.sender_id) . from: 1point3acres 
-        from. 围观我们@1point 3 acres
-        (Select S.sender_id, S.ts as ts_send, R.sender as responde_id, R.ts as ts_responde. From 1point 3acres bbs
-        From table S, table R
-        Where S.reciever = R.sender
-        And S.sender = R.reciever 
-        And seconds_between (S.ts,R.ts) <= 60
-        And seconds_between (S.ts,R.ts)  >=0) as Quick, TABLE
- 
- 
- 2.
-select count(case when ts-lag_ts<=60 then distinct responder_id end)/count(distinct responder_id) as rate
-from 
-(select a.*, lag(ts) over (partition by sender_id, responder_id order by date, ts) as lag_ts
-from table a
-)
-这个答案错了。。
 
 

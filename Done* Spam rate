@@ -36,6 +36,17 @@ What percentage of the posts viewed by the users yesterday is reported as spam?
 
 1) if only see the percentage for yesterday:
 
+SELECT ROUND(IFNULL(COUNT(review_removal.post_id)/COUNT(view_tbl.post_id),0),2) AS spam_rate
+(
+SELECT DISTINCT date, post_id
+FROM user_actions
+WHERE action = 'view' and date = DATEADD(day,-1,curdate())
+) AS view_tbl
+LEFT JOIN
+review_removal
+ON view_tbl.post_id = review_removal.post_id
+
+
 
 
 
@@ -57,17 +68,17 @@ What percentage of the posts viewed by the users yesterday is reported as spam?
 
 
 自己尝试写了一下，还麻烦大家看看对不对，请指教！
-SELECT extra AS reason, COUNT(DISTINCT post_id) as num. visit 1point3acres for more.
+SELECT extra AS reason, COUNT(DISTINCT post_id) as num
 FROM user_actions
 WHERE date = dateadd(day, -1, getdate())
 AND action = 'report'
-GROUP BY reason;. Waral 博客有更多文章,
+GROUP BY reason;
 
 SELECT u.date, COUNT(DISTINCT r.post_id)/COUNT(DISTINCT u.post_id) as spam_percentage
-FROM user_actions u. 一亩-三分-地，独家发布
-LEFT JOIN reviewer_removals r. 1point 3acres 论坛
-ON u.post_id = r.post_id 来源一亩.三分地论坛. 
-WHERE u.action = 'view'. 1point 3acres 论坛
+FROM user_actions u
+LEFT JOIN reviewer_removals r
+ON u.post_id = r.post_id 
+WHERE u.action = 'view'
 GROUP BY u.date;
 
 第一题我也这样写的

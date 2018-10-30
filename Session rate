@@ -1,4 +1,16 @@
 
+1. what is the session/user in the last 30 days?
+Table： session
+column: date| sessionid | userid | event
+
+
+2. display the distribution of time(in minutes) spent by each user per day
+Table session
+column: date| sessionid | userid | event
+Table time
+column: date | sessionid | time( in seconds) |userid
+
+
 然后介绍面试的背景是marketplace
 
 SQL: date|session id|user id| event, calculate the average number of sessions/user per day for the last 30 days

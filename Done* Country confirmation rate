@@ -40,3 +40,58 @@ ON sent_tbl.phone_num = table2.phone_num AND sent_tbl.date = table2.date
 GROUP BY date
 ORDER BY date DESC;
 
+
+
+
+SQL：上来情景是一般fb会发给用户不同类型的message，有的是需要用户confirm的。后面巴拉巴拉一大串开头有点紧张也没有完全听明白。但是对于
+我们这种刷题型选手这不重要！只要上了table一下就能看懂了。不过大家还是要认真听intervewer说话,不要miss掉重要信息。例如：fb可能给同一个号
+码发送多个需要confirm的message. 这个就是个信息，你可能代码里需要写distinct !
+我记忆里的信息，尽量还原，不保证一模一样。
+
+table: SMS_INFO
+column: { ds | country | carrier | user_number | message}
+给大家解释下：
+ds: datestamp (yyyy-mm-dd).留学论坛-一亩-三分地
+carrier: 手机的carrier
+message: FB给用户发送的类型 （eg. message, friend_request, post, ....）
+. visit 1point3acres for more.
+1） distribution of number of messages fb sent to each carrier in each country yesterday...
+这个很显然了不多解释
+提醒: 要会写yesterday的表达方式 （类似的还有几天前什么的....）. 一亩-三分-地，独家发布
+尽量think out loud, 一边写一边说。但是我知道SQL边说边写很清楚是很难的。
+我的interviewer写完了他会让你go through你为什么那么写。所以注意练习下自己口语！表达一个问题的逻辑的能力. From 1point 3acres bbs
+
+接下来第二小问。第二个table
+table: Confirm_Info
+column: {ds | number_point}
+这里虽然叫另外一个名字，但其实就是第一个table里的phone number. Waral 博客有更多文章,
+这里可以看出，FB这个职位的面试套路满满，虽然想耍点心计，但是一般不会出现偏怪的东西。要细心！. 一亩-三分-地，独家发布
+2）confirm rate
+具体不太记得了，当时立刻反应出来和friend request_acceptance_rate那种题目一样的，再次套路满满！
+所以问了interviewer有没有threshold?比如24小时之内confirm的才算有效confirm?
+面试官：good question! 你觉得threshold定多少？why. from: 1point3acres 
+我说24 hour因为user cant check their phone from time to time, but after 24 hours, its easy for them to forget... 留学申请论坛-一亩三分地
+这里欢迎大家讨论其他的回答。
+重点是没有标准答案，你自己要反应快，懂得弄一个合理的解释出来！. 留学申请论坛-一亩三分地
+后来又问我几个细节的问题，为什么最后data type 是floating的啦，为什么用left join不用其他join啦
+
+敲重点：
+刷题， 刷题，再刷题
+每一个问题都会给你看一个result table 长什么样，所以你最后要保证column name, data type都一致：细节细节再细节！
+不会的，写错的，不要慌，面试上来十分钟大脑都会有点木讷，被紧张影响发挥最划不来了
+面试官会稍微提示你哪里不太对，立刻反应就赶紧改就好了
+
+FB人都满nice所以你自己也要放轻松～善于和面试官交流，不明白的赶紧问，一定要在写code之前clarify问题
+
+沉着冷静，严肃活泼 : )
+
+楼主能再说一下sql的第二问嘛？没太看懂，为什么要threshold呀
+
+没有threshold你无法准确定义多久时间内accept的是视为有效的
+求问楼主：
+“提醒: 要会写yesterday的表达方式 （类似的还有几天前什么的....）”
+这个怎么写呢？是比如 ...
+
+我觉得哦，比如. 1point 3acres 论坛
+
+where datestamp=DATEADD(DAY, -1, cast(GETDATE() as DATE))

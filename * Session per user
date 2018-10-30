@@ -12,6 +12,15 @@ time_spent	number_of_user
 0	           4
 1	           6
 
+Q1:
+SELECT date, user_id, AVG(session_id)
+FROM tablea
+GROUP BY date, user_id
+ORDER BY AVG(session_id) DESC;
+
+Q2:
+
+
 
 
 

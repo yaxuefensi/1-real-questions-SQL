@@ -2,7 +2,7 @@
 We are studying ecommerce advertisers on FB over a certain time period (say a week). 
 The time period does not matter for this problem. You are given 2 Tables: 
 
-adv_info:advertiser_id|| ad_id|| spend (primary: ad_id) 
+adv_info:adv_id|| ad_id|| spend (primary: ad_id) 
 ad_info:ad_id|| user_id|| price (primary: ad_id, user_id) 
 
 adv_info:Contains information on advertisers. 
@@ -13,11 +13,34 @@ price is how much the user_id spend through this ad.,assuming all prices > 0.
 
 Questions- The fraction of advertisers has at least one conversion. - What metrics wouldyou show to advertisers.  
 
-Q1: What would the averageadvertiser spend on Facebook? Your query should return a single number. 
+Q1: What would the average advertiser spend on Facebook? Your query should return a single number. 
 
-追问：afterwe get this table, what will the distribution look like? 
+SELECT ROUND(AVG(tbl.adv_total_spend),2) AS adv_avg_spend
+FROM
+(
+SELECT adv_id, SUM(spend) AS adv_total_spend
+FROM adv_info
+GROUP BY adv_id
+) AS tbl;
 
-Q3.Thefraction of advertisers has at least one conversion.  
+
+追问：afterwe get this table, what will the distribution look like?
+Long tail
+
+
+Q3.The fraction of advertisers has at least one conversion.  
+
+SELECT ROUND(IFNULL(SUM(CASE WHEN tbl.user_cnt >=1 THEN 1 ELSE 0 END)/COUNT(tbl.adv_id),0),2) AS conversion_rate
+FROM
+(
+SELECT adv_info.adv_id, COUNT(user_id) AS user_cnt
+FROM adv_info
+LEFT JOIN ad_info
+ON adv_info.ad_id = ad_info.ad_id
+) AS tbl
+;
+
+
 
 SQL：sql题目比较简单：一个广告table，每行primary key是时间和广告ID，列是timestamp，adsID（广告ID），publisherID（广告商名字），还有广告价格。
 另一个table是该广告有多少人看见，多少人点击。列是timestamp，adsID，#views，#clicks 吧，具体的我想不起来了。。。反正就是很基本的求某天某广告商的
@@ -46,8 +69,9 @@ sql已经有点乱七八糟了因为我前面举例子啥的改来改去。。�
 对于大型商户和小型local的商户，你的metric会有什么不同
 
 
-Two SQL coding questions, entry level的, 之前看的面经有人建议说一定要一边写一边解释，so I did. 但是感觉真的没必要，因为太简单了,还没说完呢，代码就写完了
-Ads .1point3acres网
+Two SQL coding questions, entry level的, 之前看的面经有人建议说一定要一边写一边解释，so I did. 但是感觉真的没必要，因为太简单了,还没
+说完呢，代码就写完了
+Ads
 advertiser_id	ad_id	spend	Date	...
 conversions
 ad_id	user_id	conversion$	Date	...

@@ -1,0 +1,42 @@
+算是很简单了，， 但是紧张，开始还是犯了很低级的错误， 不过后面改正了。。。 
+date, country, carrier,phone_number, type (type 里有个很多种，例如 friend_request,  confirmation )
+Q1 算每个country， carrier 的 #of phone_number 发了confirmation 信息。。。 是不是很简单， 弱智的我开始紧张还是写错了，，， 
+Q2 给了第二个table   date  phone_number  这个表就是confirm了 confirmation 的信息的 表格。。。
+算每天 confirmation rate 
+
+Product  就是 在 newsfeed 里面加 friend recommendation  这个feature 好不好~
+
+SQL text message 
+table1: date, carrier, country, phone_number, type {friend_notice, confirmation, xxx不记得了}
+求昨天给多少手机号发了confirmation message？
+
+《注意duplicate 手机号的处理》
+
+table2: date, phone_number
+这是所有confirm了confirmation text的手机号
+
+问每天confirmation rate？
+《注意duplicate 手机号，注意time window，注意fraud》
+
+My solution:
+
+Q1:
+question:  all countries?
+
+SELECT COUNT(DISTINCT phone_num)
+FROM table1
+WHERE date = DATEADD(day,-1,curdate()) AND type = 'confirmation'
+
+Q2:
+SELECT sent_tbl.date AS date, ROUND(IFNULL(COUNT(table2.phone_num)/COUNT(sent_tbl.phone_num),0),2) AS confirm_rate
+(
+SELECT DISTINCT date, phone_num
+FROM table1
+WHERE date=DATEADD(day,-1,curdate()) AND type = 'confirmation
+) AS sent_tbl
+LEFT JOIN
+table2
+ON sent_tbl.phone_num = table2.phone_num AND sent_tbl.date = table2.date
+GROUP BY date
+ORDER BY date DESC;
+

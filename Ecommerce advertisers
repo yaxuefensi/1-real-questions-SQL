@@ -1,13 +1,16 @@
 5. 
-We arestudying ecommerce advertisers on FB over a certain time period (say a week). 
-The timeperiod does not matter for this problem. You are given 2 Tables: 
+We are studying ecommerce advertisers on FB over a certain time period (say a week). 
+The time period does not matter for this problem. You are given 2 Tables: 
+
 adv_info:advertiser_id|| ad_id|| spend (primary: ad_id) 
 ad_info:ad_id|| user_id|| price (primary: ad_id, user_id) 
+
 adv_info:Contains information on advertisers. 
-advertiser_idis id of advertiser 
-ad_id is idof an ad being run by advertiser 
-spend isamount of money in $ that advertiser pays Facebook for ad-id to show it to FBusers. 
+advertiser_id is id of advertiser 
+ad_id is id of an ad being run by advertiser 
+spend is amount of money in $ that advertiser pays Facebook for ad-id to show it to FBusers. 
 price is how much the user_id spend through this ad.,assuming all prices > 0.  
+
 Questions- The fraction of advertisers has at least one conversion. - What metrics wouldyou show to advertisers.  
 
 Q1: What would the averageadvertiser spend on Facebook? Your query should return a single number. 
@@ -37,7 +40,7 @@ eft join table_clicks b on a.extract(date from timestamp) = b.extract(date from 
 sql已经有点乱七八糟了因为我前面举例子啥的改来改去。。最后面试官说超时了，没关系他已经了解了。当时大概已经过了35分钟了。
 
 
-2. adv_info table : adv_id, ad_id, adv_spend. visit 1point3acres for more.
+2. adv_info table : adv_id, ad_id, adv_spend. 
     ad_info table: ad_id, user_id, user_spend
 用什么metric表示advertising的impact
 对于大型商户和小型local的商户，你的metric会有什么不同

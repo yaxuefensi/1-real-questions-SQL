@@ -3,25 +3,52 @@
 table1：time|userid|songid| 
 table2: userid1|userid2
 
-问今天听的最频繁的歌曲是什么？寻找一个list有userid和friendid：两个朋友有多于两首共同听过的歌曲
+1)问今天听的最频繁的歌曲是什么？
+2)寻找一个list有userid和friendid：两个朋友有多于两首共同听过的歌曲
 
 https://www.1point3acres.com/bbs/forum.php?mod=viewthread&tid=452401&extra=page%3D1%26filter%3Dsortid%26sortid%3D311%26searchoption%5B3046%5D%5Bvalue%5D%3D2%26searchoption%5B3046%5D%5Btype%5D%3Dradio%26sortid%3D311%26orderby%3Ddateline
+
+My solution:
+1) how to define the frequency? is it detrmined by the number of unique listners, or how many times this song is listened, 
+even by the same person?
+
+SELECT song_id, COUNT(DISTINCT user_id) AS user_cnt
+FROM table1
+WHERE DATE(time) = CURDATE()
+GROUP BY song_id
+ORDER BY user_cnt DESC
+LIMIT 1;
+
+2)
+SELECT t1.userid AS userid, new.freindid AS friendid, COUNT(t1.songid) AS songcount
+FROM 
+(SELECT t1.userid AS userid, t2.userid2 AS friendid, t1.songid AS songid
+ FROM table1 t1 
+ LEFT JOIN table2 t2 
+ on t1.userid = t2.userid1) new,t1
+WHERE t1.userid = new.friendid AND t1.songid = new.songid
+GROUP BY userid, friendid;
+
+
+
+
+
 
 SQL第二问是要求找出含有pairs of friends的list, 里面的每对朋友都有两首以上共同听过的歌。我试着做了一下，我希望其实是user1, 
 user2的两个column的结果，我这里用了concat, 不是很理想，但想不出来更好的。抛砖引玉，请大家多多post更好的解法。
 
 select 
 concat(userid1, userid2) as friend_pairs
-count(*) as song_ct.1point3acres网
-from. 留学申请论坛-一亩三分地
+count(*) as song_ct
+from
 (select 
 distinct 
 userid1, userid2, b.songid as song1, c.songid as song2
 from table2 a
 left outer join table1 b on a.userid1 = b.userid 
 left outer join table1 c on a.userid2 = c.userid) a
-where a.song1 = a.song2 and a.song1 is not null and a.song2 is not null 来源一亩.三分地论坛. 
-group by concat(userid1, userid2). 牛人云集,一亩三分地
+where a.song1 = a.song2 and a.song1 is not null and a.song2 is not null 
+group by concat(userid1, userid2)
 having count(*) >= 2-google 1point3acres
 
 from replier: 
@@ -34,10 +61,10 @@ AS(
         INNER JOIN table1 as t3
         ON t2.userid2 = t3.userid AND t1.songid = t3.songid
 )
-SELECT userid1, userid2.留学论坛-一亩-三分地
-FROM CTE.1point3acres网
+SELECT userid1, userid2
+FROM CTE
 GROUPBY userid1, userid2
-HAVING COUNT(songid) >= 2 来源一亩.三分地论坛. 
+HAVING COUNT(songid) >= 2 
 
 it depends on if we have duplicate pairs in table2, like A B, BA. if we only have unique pairs in table2.
 My strategy is to left join table1 to table2 to have songid for each userid1, then inner join table1 again 

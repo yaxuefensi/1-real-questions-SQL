@@ -1,0 +1,20 @@
+和地里的面经大同小异，一上来先相互介绍一下自己，然后说一下为什么想来FB
+介绍完就开始介绍今天的大致背景，SQL和product题目都是围绕ad4ad这个平台。简单来说ad4ad就是FB会找到在FB post里面卖东西的
+一些人，然后联系这些人给他们创造一个广告空间，在给这些user创造广告空间的同时FB会有potential loss或者cost because FB 
+could spent money on other advertisers, instead of targeting potential advertisers
+介绍完背景就开始SQL了，两个table如下：
+
+table a: date|event('impression','click','create_ad')|user_id|item_id|cost|spend
+table b: user_id|country|date
+
+table a介绍：event有三个值，其中impression就是FB为user创造的广告space，click代表user点进去了，create_ad代表user点进去之后正式create了ad。
+然后cost就是FB为这个user的这个item创造广告space所花费的cost，spend就是在user create_ad之后pay给FB的，所以只有create_ad那一行的spend不
+是null
+第一题：number of users that FB has invited in the last 30 days for each country
+不难，只需要a left join b 然后group by country就可以
+第二题：avg number of impressions per user per item before user creates ad 
+
+这道题稍微有点绕，但是仔细想一下也就想出来。先写个subquery，需要将table a自己join一下，然后找同时是impression和create_ad的record，最
+后group by user，item；写完subquery再用一个AVG就可以了。做完之后有个follow up question，问avg 有什么不好的地方
+
+product：list few metrics related to ad4ad, why these metrics. If one metric goes down, what is the reason? 

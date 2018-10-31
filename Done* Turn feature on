@@ -1,0 +1,36 @@
+
+1. There is table that tracks every time a user turns a feature on or off, with columns user_id, action ("on" or "off), 
+   date, and time. 
+
+1) How many users turned the feature on today? 
+USER_ID || ACTION||DATE||TIME 
+
+SELECT COUNT(DISTINCT tbl.user_id) as user_on_cnt
+FROM
+(
+SELECT DISTINCT date, user_id, action
+FROM action
+WHERE date=curdate() AND action = 'on'
+) AS tbl
+
+
+2) Create a table that tracks the user last status every day. 
+
+CREATE TABLE last_status (
+date date,
+time time,
+user_id int,
+status char
+);
+
+
+3) In a table that tracks the status of every user every day, how would you add today's data to it?   
+
+INSERT INTO last_status
+VALUES (date, time, user_id, status);
+
+
+5), 如何找出在一天之内始终保持feature on的人，(given status table and action table). 
+
+SELECT DISTINCT date, user_id, action
+FROM action

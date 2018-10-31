@@ -1,0 +1,70 @@
+
+2.SQL
+Table Account ID
+Account    date              Status  Spend
+123           08-08-2018     Open      4
+123           08-09-2018     Open      0
+123           08-10-2018     Fraud     2
+123           08-11-2018     Fraud     0
+
+Active定义是spend > 0
+
+Q1: What's the percentage of fraud user in active user in each date
+
+Q2: How many user are first time labled as 'Fraud' Today
+
+
+My Solution:
+1) Is it possible that account will have more than 1 status in one day? My understanding should be 'No'.
+2) how to define active? is it spend> 0  for any day for one account?
+
+SELECT date, SUM(CASE WHEN tbl.status = 'Fraud' THEN 1 ELSE 0 END)/COUNT(tbl.acct_id) AS fraud_rate
+FROM
+(
+SELECT date, acct_id, status
+FROM account
+WHERE spend >0
+) AS tbl
+GROUP BY date;
+
+
+2)
+
+
+
+
+
+
+数据不是很确定，所以我加了一行，假设同一个用户一天内多笔交易，有fraud 和non fraud， 即 primary key 为account, date, status，这个逻辑
+一天内有多笔fraud 不行
+Table Account ID
+Account    date              Status  Spend
+123           08-08-2018     Open     4
+123           08-09-2018     Open     0-
+123           08-10-2018     Fraud    2
+123           08-10-2018     Normal   1
+123           08-11-2018     Fraud    0
+
+Active定义是spend > 0
+
+Q1: What's the percentage of fraud user in active user in each date
+
+Select date, sum(case when "status" =='Fraud' then 1 else 0 end)/count(distinct account)
+from table
+where account in
+(select account
+From table
+Group by date, account
+Having sum(spend)>0
+) -- Find active user 
+group by date
+
+Q2: How many user are first time labled as 'Fraud' Today
+
+Select count(account) from
+(
+Select Row_number() over (partition by account order by date asc) as rank, * 
+from table 
+Where status = 'Fraud'
+)
+Where rank = 1 and  date = current_date()

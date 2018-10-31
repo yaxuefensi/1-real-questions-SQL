@@ -1,5 +1,0 @@
-
-题目：
-2 个SQL， 不难， 基础的掌握好就行
-1. 用到了 group by， having， count
-2. 用到了 distinct, left outer join， date_difference(to_date('2018-09-01'), to_date(column_name)) > 7

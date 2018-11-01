@@ -18,3 +18,48 @@ table a介绍：event有三个值，其中impression就是FB为user创造的广�
 后group by user，item；写完subquery再用一个AVG就可以了。做完之后有个follow up question，问avg 有什么不好的地方
 
 product：list few metrics related to ad4ad, why these metrics. If one metric goes down, what is the reason? 
+
+1) iterate the function of ad4ad
+2) the goal of ad4ad: more posters become advertisers, revenue
+3) metrics: the percentage of poseters who become advisers
+
+
+
+Q1:  number of users that FB has invited in the last 30 days for each country
+
+SELECT tableb.country, COUNT(tbl.user_id) 
+FROM tableb
+LEFT JOIN
+(
+SELECT DISTINCT date, user_id, event
+FROM tablea
+WHERE DATEDIFF(day,date,curdate())<30 AND event = 'impression'
+) AS tbl
+ON tableb.user_id = tbl.user_id
+GROUP BY tableb.country;
+
+Q2:  avg number of impressions per user per item before user creates ad 
+
+SELECT AVG(total.imp_cnt) AS avg_imp_cnt
+FROM
+(
+SELECT tbl.user_id, tbl.item_id, COUNT(tbl.imp_date) AS imp_cnt
+FROM
+(
+SELECT imp.date AS imp_date, imp.user_id AS user_id, imp.item_id AS item_id, create.date AS crt_date
+FROM
+(
+SELECT date,user_id,item_id,event
+FROM tablea
+WHERE event = 'impression'
+) AS imp
+JOIN
+(
+SELECT date,user_id,item_id,event
+FROM tablea
+WHERE event = 'create_ad'
+) AS create
+ON imp.user_id = create.user_id, imp.event_id = create.event_id
+) AS tbl
+GROUP BY user_id, event_id
+) AS total

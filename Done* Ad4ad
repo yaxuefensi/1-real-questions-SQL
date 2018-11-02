@@ -63,3 +63,26 @@ ON imp.user_id = create.user_id, imp.event_id = create.event_id
 ) AS tbl
 GROUP BY user_id, event_id
 ) AS total
+
+
+
+
+
+
+如果我没记错的话应该是
+. Waral 博客有更多文章,
+1. SELECT a.country, COUNT(DISTINCT a.user_id) AS num_users. 一亩-三分-地，独家发布
+FROM a LEFT JOIN b. 留学申请论坛-一亩三分地
+ON a.user_id = b.user_id AND DATEDIFF(a.date, CURDATE()) <= 30
+GROUP BY  a.country
+
+2. 
+SELECT AVG(sub.num_impression) AS avg_imp
+FROM (SELECT a.user_id, a.item_id, SUM(CASE WHEN a.event = 'impression' AND b.event IS NOT NULL THEN 1 ELSE 0 END AS) num_impression
+   FROM table_a a JOIN table_a b
+  ON a.user_id = b.user_id AND a.item_id = b.item_id AND a.event = 'impression' AND b.event = 'create_ad'. visit 1point3acres for more.
+WHERE a.date < b.date
+GROUP BY a.user_id, a.item_id) sub. more info on 1point3acres
+大致就是这样的，然后avg就说不够robust to outliers，可以考虑用median
+
+metric 还可以提到revenue per targeted user

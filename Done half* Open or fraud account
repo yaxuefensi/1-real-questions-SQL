@@ -14,6 +14,63 @@ Q1: What's the percentage of fraud user in active user in each date
 Q2: How many user are first time labled as 'Fraud' Today
 
 
+
+TRY:
+Q1: 
+ask:  for one account, it only has record in 1 day  right?
+
+SELECT, active.date, ROUND(SUM(CASE WHEN active.status = 'Fraud' THEN 1 ELSE 0 END)/COUNT(DISTINCT account),2) AS fraud_rate
+FROM
+(
+SELECT account, date, status
+FROM table
+WHERE spend >0
+) AS active
+GROUP BY active.date
+
+Q2: 
+
+SELECT COUNT(DISTINCT t2.account) AS cnt
+FROM
+(
+SELECT account, status, COUNT(*)
+FROM
+(
+SELECT account, date, status
+FROM table 
+WHERE account IN
+(
+SELECT account
+FROM table
+WHERE date = curdate() AND status = 'Fraud'
+)
+) AS t1
+GROUP BY account, status
+HAVING COUNT(*) = 1
+) AS t2
+
+/*first I want to get the accounts, for which the status is fraud as of today. and for those accounts, get all their records
+from this table. 
+* then I want to see for these accounts, the count of each account and their status.  If the accounts are only marked
+as fraud today, then the count should be only 1.
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 My Solution:
 1) Is it possible that account will have more than 1 status in one day? My understanding should be 'No'.
 2) how to define active? is it spend> 0  for any day for one account?

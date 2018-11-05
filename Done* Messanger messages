@@ -4,6 +4,41 @@
 问 1) find fraction of ppl messaging >= 5 ppl each day
 2) fraction of ppl that response within 60s （这题我写的时候觉得有些tricky，其实只要self join就可以）
 
+1)
+
+SELECT tbl.date, SUM(CASE WHEN receiver_cnt >=5 THEN 1 ELSE 0 END)/COUNT(sender_id) AS rate
+FROM
+(
+SELECT date, sender_id, COUNT(DISTINCT receiver_id) AS receiver_cnt
+FROM table
+GROUP BY date, sender_id
+) AS tbl
+GROUP BY tbl.date
+
+SELECT date, SUM(CASE WHEN cnt >=5 THEN 1 ELSE 0 END)/COUNT(*)
+FROM 
+(
+SELECT date, sender_id AS id, COUNT(DISTINt receiver_id) AS cnt
+FROM table
+GROUP BY date, sender_id
+UNION
+SELECT date, receiver_id, COUNT(DISTINCT sender_id) 
+FROM table
+GROUP BY date, receiver_id
+) AS tbl
+GROUP BY date;
+
+
+
+2)
+
+SELECT COUNT(b.receiver_id)/COUNT(a.receiver_id) AS rate
+FROM table AS a
+LEFT JOIN table AS b
+ON a.sender_id = b.receiver_id AND a.receiver_id = b.sender_id AND DATEDIFF(second, a.date,b.date) BETWEEN 0 AND 60;
+
+
+
 
 Table：Date, Timestamp, sender_id, receiver_id
 
@@ -98,8 +133,8 @@ having count(distinct sender_id) >5) a
           group by date, ts
           Having count(*) >=5. 
         2) 
-        Select count(distinct Quick.sender_id)/count(distinct Table.sender_id) . from: 1point3acres 
-        from. 围观我们@1point 3 acres
+        Select count(distinct Quick.sender_id)/count(distinct Table.sender_id) 
+        from
         (Select S.sender_id, S.ts as ts_send, R.sender as responde_id, R.ts as ts_responde. From 1point 3acres bbs
         From table S, table R
         Where S.reciever = R.sender

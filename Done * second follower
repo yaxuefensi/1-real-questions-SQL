@@ -21,6 +21,21 @@ should output:
 
 My try:
 
+SELECT a.follower, COUNT(DISTINCT b.follower) AS num
+FROM table AS a
+JOIN table AS b
+ON a.follower = b.followee
+GROUP BY a.follower
+ORDER BY num DESC;
+
+
+
+
+
+
+
+My try:
+
 SELECT t1.follower, COUNT(DISTINCT t2.follower) AS num
 FROM table AS t1
 JOIN table AS t2

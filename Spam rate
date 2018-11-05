@@ -1,0 +1,37 @@
+Table: user_actions
+ds (STRING) | user_id (BIGINT) |post_id (BIGINT) |action (STRING) | extra (STRING)
+'2018-07-01'| 1209283021       | 329482048384792 | 'view'         |
+'2018-07-01'| 1209283021       | 329482048384792 | 'like'         | 
+'2018-07-01'| 1938409273       | 349573908750923 | 'reaction'     | 'LOVE'
+'2018-07-01'| 1209283021       | 329482048384792 | 'comment'      | 'Such nice Raybans'
+'2018-07-01'| 1238472931       | 329482048384792 | 'report'       | 'SPAM'
+'2018-07-01'| 1298349287       | 328472938472087 | 'report'       | 'NUDITY'
+'2018-07-01'| 1238712388       | 329482048384792 | 'reshare'      | 'I wanted to share with you all'
+
+
+Q1: How many posts were reported yesterday for each report Reason?
+
+SELECT extra, COUNT(DISTINCT post_id)
+FROM user_actions
+WHERE action = 'report' AND date(ds) = DATEADD(day,-1,curdate())
+GROUP BY extra;
+
+
+Table: reviewer_removals
+ds (STRING) | reviewer_id (BIGINT) | post_id (BIGINT) |  
+'2018-07-01'| 3894729384729078     | 329482048384792  |                
+'2018-07-01'| 8477594743909585     | 388573002873499  |
+
+Q2: What percent of daily content that users view on Facebook is actually Spam? 
+
+SELECT *
+FROM user_actions
+LEFT JOIN reviewer_removals
+ON user_actions.post_id = reviewer_removals.post_id
+
+
+
+
+Q3: Facebook has decided to be proactive about SPAM, instead of merely reactive. We decide to address the SPAM 
+problem through a Machine Learning solution predicting whether a given post is indeed SPAM. We want to use the 
+predictions in order to downrank/deprioritize suspected SPAM from news feed. 

@@ -8,6 +8,24 @@ table2: userid1|userid2
 
 https://www.1point3acres.com/bbs/forum.php?mod=viewthread&tid=452401&extra=page%3D1%26filter%3Dsortid%26sortid%3D311%26searchoption%5B3046%5D%5Bvalue%5D%3D2%26searchoption%5B3046%5D%5Btype%5D%3Dradio%26sortid%3D311%26orderby%3Ddateline
 
+Try:
+
+SELECT songid, COUNT(*)
+FROM table1
+WHERE date(time) = curdate()
+GROUP BY songid
+ORDER BY COUNT(*) DESC
+LIMIT 1;
+
+
+
+
+
+
+
+
+
+
 My solution:
 1) how to define the frequency? is it detrmined by the number of unique listners, or how many times this song is listened, 
 even by the same person?

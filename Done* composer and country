@@ -8,7 +8,7 @@ SQL
   My solution:
   clarify: so every enter will lead to record 'post' or 'cancel'? Any other possibilities?
   
-  SELECT ROUND(SUM(CASE WHEN event='post' THEN 1 ELSE 0 END)/SUM(CASE WHEN event = 'post' THEN 1 ELSE 0 END),2) AS post_rate
+  SELECT ROUND(SUM(CASE WHEN event='post' THEN 1 ELSE 0 END)/SUM(CASE WHEN event = 'enter' THEN 1 ELSE 0 END),2) AS post_rate
   FROM composer
   WHERE DATEDIFF(day,date,curdat()) <7
   
@@ -89,7 +89,7 @@ From User
 Left Join
 (Select user_id, SUM(IF(event='post',1,0)) as post from Composer 
 Where date=current_date()) C
-On U.user_id=C.user_id.本文原创自1point3acres论坛
+On U.user_id=C.user_id
 Where U.date=current_date()
 Group By 1
 

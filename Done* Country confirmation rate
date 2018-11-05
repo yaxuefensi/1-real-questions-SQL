@@ -18,6 +18,37 @@ table2: date, phone_number
 问每天confirmation rate？
 《注意duplicate 手机号，注意time window，注意fraud》
 
+1. 
+SELECT country, carrier, COUNT(DISTINCT phone_number) AS confirmation_cnt
+FROM table
+WHERE type = 'confirmation' AND date = DATEADD(day,-1, curdate())
+GROUP BY country, carrier
+
+2.
+
+SELEC b.date, COUNT(b.phone_number)/COUNT(send.phone_number)
+FROM
+(
+SELECT date, phone_number, type
+FROM a
+WHERE type = 'confirmation'
+) AS send
+LEFT JOIN b
+ON send.phone_number = b.phone_number AND DATEDIFF(hour,send.date,b.date)<24
+GROUP BY b.date
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 1. 
 SELECT country, carrier, COUNT(phone_number) AS confirmation_cnt

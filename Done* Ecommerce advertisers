@@ -15,6 +15,17 @@ Questions- The fraction of advertisers has at least one conversion. - What metri
 
 Q1: What would the average advertiser spend on Facebook? Your query should return a single number. 
 
+
+
+
+SELECT AVG(tbl.tol_spend)
+FROM
+(
+SELECT adv_id, SUM(spend) AS tol_spend
+FROM adv_info
+GROUP BY adv_id
+) AS tbl;
+
 SELECT ROUND(AVG(tbl.adv_total_spend),2) AS adv_avg_spend
 FROM
 (
@@ -29,6 +40,15 @@ Long tail
 
 
 Q3.The fraction of advertisers has at least one conversion.  
+
+
+
+
+
+
+
+
+
 
 SELECT ROUND(IFNULL(SUM(CASE WHEN tbl.user_cnt >=1 THEN 1 ELSE 0 END)/COUNT(tbl.adv_id),0),2) AS conversion_rate
 FROM

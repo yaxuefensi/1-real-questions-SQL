@@ -11,6 +11,15 @@ ds (STRING) | user_id (BIGINT) |post_id (BIGINT) |action (STRING) | extra (STRIN
 
 Q1: How many posts were reported yesterday for each report Reason?
 
+SELECT extra, COUNT(DISTINCT post_id) AS report_cnt
+FROM user_actions
+WHERE action = 'report' and DATE(ds) = DATEADD(day,-1,curdate())
+GROUP BY extra
+
+
+
+
+
 SELECT extra, COUNT(DISTINCT post_id)
 FROM user_actions
 WHERE action = 'report' AND date(ds) = DATEADD(day,-1,curdate())
@@ -23,6 +32,17 @@ ds (STRING) | reviewer_id (BIGINT) | post_id (BIGINT) |
 '2018-07-01'| 8477594743909585     | 388573002873499  |
 
 Q2: What percent of daily content that users view on Facebook is actually Spam? 
+
+
+
+SELECT u.date, COUNT(DISTINCT b.post_id)/COUNT(DISTINCT a.post_id)  AS spam_rate
+FROM user_action AS u
+LEFT JOIN reviewer_removals AS r
+ON u.post_id = r.post_id  
+WHERE a.action = 'view'
+GROUP BY u.date;
+
+
 
 SELECT a.date, COUNT(DISTINCT r.post_id)/COUNT(DISTINCT a.post_id) AS spam_rate
 FROM user_actions AS a

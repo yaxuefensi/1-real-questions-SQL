@@ -10,6 +10,38 @@ action_id, target_id, action （accept, request, unfriend), date, time.
 1：overall friend accept rate.  
 2：who has most friends.
 
+
+1)
+
+SELECT action_id, COUNT(DISTINCT friend_id) AS friend_cnt
+FROM
+(
+SELECT action_id, target_id AS friend_id
+FROM table
+WHERE action = 'accept'
+UNION
+SELECT a.action_id, b.action_id 
+FROM table AS a
+JOIN table AS b
+ON a.action_id = b.target_id AND a.target_id = b.action_id AND a.action = 'sent' AND b.action = 'accept' AND b.date>a.date
+) AS tbl
+GROUP BY action_id
+ORDER BY friend_cnt DESC
+LIMIT 1;
+
+
+2)
+
+
+
+
+
+
+
+
+
+
+
 1) 要求计算每个人的好友
 
 SELECT tbl.action_id, COUNT(DISTINCT tbl.target_id) AS friend_cnt

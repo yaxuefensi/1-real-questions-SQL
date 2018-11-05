@@ -15,6 +15,26 @@ Questions- The fraction of advertisers has at least one conversion. - What metri
 
 Q1: What would the average advertiser spend on Facebook? Your query should return a single number. 
 
+SELECT AVG(total_spend) 
+FROM
+(
+SELECT adv_id, SUM(spend) AS total_spend
+FROM adv_info
+GROUP BY adv_id
+) AS tbl
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

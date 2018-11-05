@@ -19,6 +19,22 @@ should output:
 |     D       |  1         |
 +-------------+------------+
 
+My try:
+
+SELECT t1.follower, COUNT(DISTINCT t2.follower) AS num
+FROM table AS t1
+JOIN table AS t2
+ON t1.follower = t2.followee
+GROUP BY t1.follower
+ORDER BY  num DESC;
+
+
+
+
+
+
+
+
 Solution:
 SELECT f1.follower, COUNT(DISTINCT f2.follower) AS num
 FROM follow AS f1

@@ -18,6 +18,22 @@ ORDER BY COUNT(*) DESC;
 
 2) 如果现在content_type变成post, video, photo,article，要求计算每一个content type的comment distribution。 
 
+
+
+SELECT a.content_type, COUNT(b.content_id) AS comment_cnt
+FROM TABLE AS a
+LEFT JOIN TABLE AS b
+ON a.content_id = b.target_id AND a.content_type IN ('post','video','photo','article') 
+   AND b.content_type = 'comment'
+GROUP BY a.content_type
+
+
+
+
+
+
+
+
 My Solution:
 SELECT content_actions.content_type, COUNT(comment_tbl.target_id) AS comment_cnt
 FROM content_actions

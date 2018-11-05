@@ -7,7 +7,16 @@ ds timestamp
 )
 How would you assess the quality of app?
 
+
 How to compute click-through rate (in mySQL)? 
+
+SELECT app_id, SUM(CASE WHEN type = 'click' THEN 1 ELSE 0 END)/COUNT(*) AS CTR
+FROM dialog
+GROUP BY app_id;
+
+
+
+
 
 Now we know the rate is 1.4. What does it mean? 
 

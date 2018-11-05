@@ -18,6 +18,36 @@ table2: date, phone_number
 问每天confirmation rate？
 《注意duplicate 手机号，注意time window，注意fraud》
 
+
+1. 
+SELECT country, carrier, COUNT(phone_number) AS confirmation_cnt
+FROM
+(
+SELECT date, country, carrier, phone_number
+FROM table
+WHERE type = 'confirmation' AND date = DATEADD(day,-1,curdate())
+)AS tbl
+GROUP BY country, carrier;
+
+
+2.
+
+SELECT b.date, COUNT(b.phone_num)/COUNT(a.phone_num) AS confirmation_rate
+FROM
+(
+SELECT date, phone_num
+FROM a
+WHERE type = 'confirmation'
+) AS tbl
+LEFT JOIN b
+ON tbl.phone_num = b.phone_num AND b.date> a.date
+GROUP BY b.date
+
+
+
+
+
+
 My solution:
 
 Q1:
@@ -27,8 +57,10 @@ SELECT COUNT(DISTINCT phone_num)
 FROM table1
 WHERE date = DATEADD(day,-1,curdate()) AND type = 'confirmation'
 
+
 Q2:
 SELECT sent_tbl.date AS date, ROUND(IFNULL(COUNT(table2.phone_num)/COUNT(sent_tbl.phone_num),0),2) AS confirm_rate
+FROM
 (
 SELECT DISTINCT date, phone_num
 FROM table1
@@ -41,7 +73,7 @@ GROUP BY date
 ORDER BY date DESC;
 
 
-
+AND DATEDIFF(hour, d1,d2) < 
 
 SQL：上来情景是一般fb会发给用户不同类型的message，有的是需要用户confirm的。后面巴拉巴拉一大串开头有点紧张也没有完全听明白。但是对于
 我们这种刷题型选手这不重要！只要上了table一下就能看懂了。不过大家还是要认真听intervewer说话,不要miss掉重要信息。例如：fb可能给同一个号

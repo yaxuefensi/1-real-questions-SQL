@@ -9,6 +9,18 @@ date|time|sender_id|receiver_id|type(这个楼主有点记不清楚了，好像�
 然后他suggest我们要有一个Time period, 如果过了一个time period那不我们就不count这个request了。这个我用的datediff。
 
 
+
+
+
+SELECT b.date, IFNULL(COUNT(b.sender_id)/COUNT(a.sender_id),0) AS rate
+FROM table AS a
+JOIN table AS b
+ON a.send_id = b.receiver_id AND a.receiver_id = b.sender_id AND a.type = 'request' AND b.type = 'accept' 
+WHERE DATEDIFF(hour,a.date,b.date) < 24
+GROUP BY b.date
+
+
+
 我的题是这样的
 sender_id| receiver_id| action| date
 sender_id: 动作发出者

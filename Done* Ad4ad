@@ -13,7 +13,42 @@ table a介绍：event有三个值，其中impression就是FB为user创造的广�
 第一题：number of users that FB has invited in the last 30 days for each country
 不难，只需要a left join b 然后group by country就可以
 
+
+SELECT b.country, COUNT(DISTINCT a.user_id) FROM user_cnt
+FROM b
+LEFT JOIN a
+ON b.user_id = a.user_id
+WHERE DATEDIFF(day,a.date, curdate()) <30
+GROUP BY b.country;
+
+
+
+
+
 第二题：avg number of impressions per user per item before user creates ad 
+
+
+
+
+SELECT AVG(tbl.num_impression) AS avg_impression
+FROM
+(
+SELECT a.user_id, a.item_id, COUNT(*) AS num_impression
+FROM table AS a
+JOIN table AS b
+ON a.user_id = b.user_id AND a.item_id = b.item_id AND a.event = 'impressions' AND b.event='created_ad'
+WHERE b.date > a.date
+GROUP BY a.user_id, a.item_id
+) AS tbl
+
+
+
+
+
+
+
+
+
 
 这道题稍微有点绕，但是仔细想一下也就想出来。先写个subquery，需要将table a自己join一下，然后找同时是impression和create_ad的record，最
 后group by user，item；写完subquery再用一个AVG就可以了。做完之后有个follow up question，问avg 有什么不好的地方

@@ -12,6 +12,7 @@ table a介绍：event有三个值，其中impression就是FB为user创造的广�
 是null
 第一题：number of users that FB has invited in the last 30 days for each country
 不难，只需要a left join b 然后group by country就可以
+
 第二题：avg number of impressions per user per item before user creates ad 
 
 这道题稍微有点绕，但是仔细想一下也就想出来。先写个subquery，需要将table a自己join一下，然后找同时是impression和create_ad的record，最
@@ -21,7 +22,37 @@ product：list few metrics related to ad4ad, why these metrics. If one metric go
 
 1) iterate the function of ad4ad
 2) the goal of ad4ad: more posters become advertisers, revenue
+
 3) metrics: the percentage of poseters who become advisers
+
+
+1)
+SELECT b.country, COUNT(DISTINC a.user_id) AS user_cnt
+FROM b
+LEFT JOIN a
+ON a.user_id = b.user_id
+WHERE  DATEDIFF(day, a.date,curdate()) < 30
+GROUP BY b.country;
+
+2)
+
+SELECT AVG(tbl.num_impression) AS avg_imp
+FROM
+(
+SELECT a.user_id, a.item_id, COUNT(*) AS num_impression
+FROM table AS a
+JOIN table AS b
+ON a.user_id = b.user_id AND a.item_id = b.item_id AND a.event = 'impression' AND b.event = 'create_ad'
+WHERE b.date> a.date
+) AS tbl
+
+
+
+
+
+
+
+
 
 
 
@@ -71,18 +102,22 @@ GROUP BY user_id, event_id
 
 如果我没记错的话应该是
 . Waral 博客有更多文章,
-1. SELECT a.country, COUNT(DISTINCT a.user_id) AS num_users. 一亩-三分-地，独家发布
-FROM a LEFT JOIN b. 留学申请论坛-一亩三分地
+1. SELECT a.country, COUNT(DISTINCT a.user_id) AS num_users
+FROM a LEFT JOIN b
 ON a.user_id = b.user_id AND DATEDIFF(a.date, CURDATE()) <= 30
 GROUP BY  a.country
 
 2. 
 SELECT AVG(sub.num_impression) AS avg_imp
-FROM (SELECT a.user_id, a.item_id, SUM(CASE WHEN a.event = 'impression' AND b.event IS NOT NULL THEN 1 ELSE 0 END AS) num_impression
-   FROM table_a a JOIN table_a b
-  ON a.user_id = b.user_id AND a.item_id = b.item_id AND a.event = 'impression' AND b.event = 'create_ad'. visit 1point3acres for more.
+FROM (SELECT a.user_id, a.item_id, 
+      SUM(CASE WHEN a.event = 'impression' AND b.event IS NOT NULL THEN 1 ELSE 0 END AS) num_impression
+   FROM table_a a 
+   JOIN table_a b
+  ON a.user_id = b.user_id AND a.item_id = b.item_id AND a.event = 'impression' AND b.event = 'create_ad'.
 WHERE a.date < b.date
-GROUP BY a.user_id, a.item_id) sub. more info on 1point3acres
+GROUP BY a.user_id, a.item_id) sub
+
+
 大致就是这样的，然后avg就说不够robust to outliers，可以考虑用median
 
 metric 还可以提到revenue per targeted user

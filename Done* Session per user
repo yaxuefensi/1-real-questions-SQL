@@ -1,4 +1,5 @@
-数据表有两张，均为user log, 对于A表：每一次用户进入页面分派一个unique session id，用户离开则这一个session结束，期间用户的每一个行为都会生成一条记录；对于表B：记录一条session存在的时间。. 留学申请论坛-一亩三分地
+数据表有两张，均为user log, 对于A表：每一次用户进入页面分派一个unique session id，用户离开则这一个session结束，期间用户的每一个行为都会生成
+一条记录；对于表B：记录一条session存在的时间。
 A: date, session_id, user_id, act('enter', 'exit', 'post')
 B: date, session_id, time_spent
 
@@ -6,6 +7,19 @@ Q1：generate average number of session per user per day.
 
 date	      average_number_session_per_user
 2018-09-09	30
+
+SELECT date, AVG(tbl.cnt) AS avg_cnt
+FROM
+(
+SELECT data, user, COUNT(session_id) AS cnt
+FROM a
+GROUP BY date, user
+) AS tbl
+GROUP BY tbl.date
+
+
+
+
 Q2: generate number of user per time interval. in order to measure how many user is spending certain amount of time. 比如： 
 
 time_spent	number_of_user

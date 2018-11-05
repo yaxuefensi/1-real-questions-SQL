@@ -14,6 +14,31 @@ Q1: What's the percentage of fraud user in active user in each date
 Q2: How many user are first time labled as 'Fraud' Today
 
 
+My try:
+
+SELECT tbl.date, SUM(CASE WHEN status = 'Fraud' THEN 1 ELSE 0 END)/COUNT(account) AS fraud_rate
+FROM
+(
+SELECT date, account, status
+FROM table
+WHERE spend>0
+) AS tbl
+GROUP BY tbl.date
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 TRY:
 Q1: 
